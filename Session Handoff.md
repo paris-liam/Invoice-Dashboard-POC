@@ -4,6 +4,16 @@ Last worked: 13 Aug 2026. Two pages are built and verified in a browser: `Draft 
 
 ---
 
+## In progress: Invoice Management (Payments)
+
+User stories 52724 (Invoice List) and 56066 (Header Section). See `Design Spec — Invoice Management.md` and `Implementation Plan — Invoice Management.md`.
+
+Spec is agreed — key calls: Children column is a display-only rollup of a payor's sibling invoices, not a data-model merge; Payments-only, `Draft Invoices.dc.html` untouched; new `enrollmentStatus` field (Enrolled/Waitlisted/Withdrawn), separate from Draft Invoices' enrollment-*change* semantics; Notes column is computed (ACH failure count / credit summary), not authored; Invoice Analytics tab is a straight static port from Draft Invoices, not wired to real data.
+
+Implementation not yet started — begin at Task 1 of the implementation plan.
+
+---
+
 ## How to pick this up
 
 ```
