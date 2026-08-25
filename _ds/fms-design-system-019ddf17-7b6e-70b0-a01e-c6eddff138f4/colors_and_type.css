@@ -1,0 +1,281 @@
+/* ============================================
+   FMS DESIGN SYSTEM — Colors & Type
+   Source: fms-modernized-webapp/src/styles/global-styles.scss
+   ============================================ */
+
+/* ---------- FONTS ---------- */
+@font-face {
+  font-family: "Quicksand";
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+  src: url("./fonts/Quicksand-Light.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Quicksand";
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+  src: url("./fonts/Quicksand-Regular.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Quicksand";
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+  src: url("./fonts/Quicksand-Medium.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Quicksand";
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+  src: url("./fonts/Quicksand-Bold.woff2") format("woff2");
+}
+
+:root {
+  /* ============================================
+     COLORS — Named "candy/dessert" theme
+     ============================================ */
+
+  --white: #fff;
+  --black: #000;
+
+  /* Blueberry Pie — primary brand (deep navy blue) */
+  --blueberry-pie--50:  rgb(22 125 243 / 100%);
+  --blueberry-pie--100: rgb(10 112 230 / 100%);
+  --blueberry-pie--200: rgb(5 100 209 / 100%);
+  --blueberry-pie--300: rgb(2 76 162 / 100%);
+  --blueberry-pie--400: rgb(0 52 112 / 100%);
+  --blueberry-pie--500: rgb(0 40 87 / 100%);    /* PRIMARY — #002857 */
+  --blueberry-pie--600: rgb(0 29 61 / 100%);
+  --blueberry-pie--700: rgb(0 5 10 / 100%);
+
+  /* Cotton Candy — accent (sky blue) */
+  --cotton-candy--50:  rgb(140 201 248 / 100%);
+  --cotton-candy--100: rgb(114 190 248 / 100%);
+  --cotton-candy--200: rgb(88 179 249 / 100%);
+  --cotton-candy--300: rgb(35 157 251 / 100%);
+  --cotton-candy--400: rgb(2 133 232 / 100%);
+  --cotton-candy--500: rgb(2 118 207 / 100%);   /* ACCENT — #0276CF */
+  --cotton-candy--600: rgb(0 104 184 / 100%);
+  --cotton-candy--700: rgb(0 75 133 / 100%);
+  --cotton-candy--800: rgb(0 46 82 / 100%);
+
+  /* Toasted Marshmallow — secondary (warm cream / honey) */
+  --toasted-marshmallow--400: rgb(248 240 226 / 100%);
+  --toasted-marshmallow--500: rgb(243 230 206 / 100%); /* SECONDARY surface */
+  --toasted-marshmallow--600: rgb(240 220 183 / 100%);
+  --toasted-marshmallow--700: rgb(235 201 137 / 100%);
+  --toasted-marshmallow--800: rgb(237 184 84 / 100%);
+  --toasted-marshmallow--900: rgb(244 168 26 / 100%);
+  --toasted-marshmallow--950: rgb(219 143 0 / 100%);
+
+  /* Gummy Sharks — tertiary (mint teal) */
+  --gummy-sharks--50:  rgb(237 247 247 / 100%);
+  --gummy-sharks--100: rgb(219 240 239 / 100%);
+  --gummy-sharks--200: rgb(200 234 233 / 100%);
+  --gummy-sharks--300: rgb(161 222 220 / 100%);
+  --gummy-sharks--400: rgb(121 210 207 / 100%);
+  --gummy-sharks--500: rgb(102 204 201 / 100%);
+  --gummy-sharks--600: rgb(77 203 199 / 100%);
+  --gummy-sharks--700: rgb(46 184 179 / 100%);
+  --gummy-sharks--800: rgb(27 152 148 / 100%);
+  --gummy-sharks--900: rgb(13 115 111 / 100%);
+
+  /* Icy Pop — pale informational blue */
+  --icy-pop--400: rgb(197 233 251 / 100%);
+  --icy-pop--500: rgb(174 224 250 / 100%);
+  --icy-pop--600: rgb(147 216 251 / 100%);
+  --icy-pop--700: rgb(93 200 253 / 100%);
+  --icy-pop--800: rgb(41 184 255 / 100%);
+  --icy-pop--900: rgb(0 163 245 / 100%);
+
+  /* Cool Mint — pale informational mint */
+  --cool-mint--400: rgb(187 237 235 / 100%);
+  --cool-mint--500: rgb(166 231 229 / 100%);
+  --cool-mint--600: rgb(143 230 227 / 100%);
+  --cool-mint--700: rgb(96 225 221 / 100%);
+  --cool-mint--800: rgb(42 229 222 / 100%);
+  --cool-mint--900: rgb(13 206 200 / 100%);
+
+  /* Danger / Error — red */
+  --danger-100: rgb(234 169 173 / 100%);
+  --danger-300: rgb(224 103 109 / 100%);
+  --danger-400: rgb(217 58 66 / 100%);
+  --danger-500: rgb(210 40 48 / 100%); /* PRIMARY danger */
+  --danger-700: rgb(154 19 26 / 100%);
+
+  /* Warning — yellow (Carbon-aligned #F1C21B) */
+  --warning-100: rgb(254 247 224 / 100%);
+  --warning-300: rgb(252 226 138 / 100%);
+  --warning-500: rgb(241 194 27 / 100%);
+  --warning-700: rgb(194 155 22 / 100%);
+
+  /* Grays */
+  --gray-1: rgb(249 249 249 / 100%);
+  --gray-2: rgb(235 235 235 / 100%);
+  --gray-3: rgb(216 216 216 / 100%);
+  --gray-4: rgb(197 197 197 / 100%);
+  --gray-5: rgb(117 117 117 / 100%);
+  --gray-6: rgb(82 82 82 / 100%);
+  --gray-7: rgb(51 51 51 / 100%);
+
+  /* ============================================
+     SEMANTIC COLOR TOKENS
+     ============================================ */
+  --color-fg-primary:    var(--blueberry-pie--500);
+  --color-fg-secondary:  var(--gray-6);
+  --color-fg-muted:      var(--gray-5);
+  --color-fg-on-color:   var(--white);
+  --color-fg-link:       var(--cotton-candy--500);
+  --color-fg-danger:     var(--danger-500);
+  --color-fg-warning:    var(--warning-700);
+
+  --color-bg-canvas:     var(--gray-1);
+  --color-bg-surface:    var(--white);
+  --color-bg-surface-alt: var(--toasted-marshmallow--500);
+  --color-bg-brand:      var(--blueberry-pie--500);
+  --color-bg-accent:     var(--cotton-candy--500);
+  --color-bg-search:     color-mix(in srgb, var(--cotton-candy--400) 12%, white);
+
+  --color-border-default: var(--blueberry-pie--500);
+  --color-border-subtle:  var(--gray-3);
+  --color-border-focus:   var(--blueberry-pie--500);
+
+  /* ============================================
+     TYPOGRAPHY — Quicksand only (entire system)
+     ============================================ */
+  --font-family-base: "Quicksand", system-ui, -apple-system, "Segoe UI",
+    Roboto, sans-serif;
+  --font-family-mono: "Quicksand", ui-monospace, monospace; /* per CDS override */
+
+  --font-size-xxs:   0.625rem;  /* 10px - pills, badges */
+  --font-size-xs:    0.75rem;   /* 12px - labels, captions */
+  --font-size-sm:    0.75rem;   /* 12px */
+  --font-size-base:  0.875rem;  /* 14px - body */
+  --font-size-lg:    1rem;      /* 16px */
+  --font-size-xl:    1.25rem;   /* 20px - headings */
+  --font-size-xxl:   1.5rem;    /* 24px - large headings / stats */
+
+  --font-weight-light:    200;
+  --font-weight-normal:   400;
+  --font-weight-medium:   500;
+  --font-weight-semibold: 600;
+  --font-weight-bold:     700;
+
+  --line-height-tight:   1;
+  --line-height-normal:  1.15;
+  --line-height-relaxed: 1.5;
+
+  /* ============================================
+     SPACING / RADII / SHADOWS
+     ============================================ */
+  --space-xxs: 0.25rem;
+  --space-xs:  0.5rem;
+  --space-sm:  0.75rem;
+  --space-md:  1rem;
+  --space-lg:  1.5rem;
+  --space-xl:  2rem;
+  --space-2xl: 3rem;
+  --space-3xl: 4rem;
+
+  --radius-xs:        2px;
+  --radius-xs-plus:   4px;
+  --radius-sm:        5px;
+  --radius-md:        12px;
+  --radius-lg:        30px;
+  --radius-pill:      35px;   /* Carbon button override */
+  --radius-full:      9999px;
+
+  --border-width-thin:   1px;
+  --border-width-medium: 2px;
+  --border-width-thick:  3px;
+
+  --shadow-sm: 0 0.0625rem 0.1875rem rgb(0 0 0 / 10%);
+  --shadow-md: 0 0.125rem 0.5rem  rgb(0 0 0 / 15%);
+  --shadow-lg: 0 0.25rem 1rem     rgb(0 0 0 / 20%);
+  --shadow-card: 0 2px 4px rgb(0 0 0 / 10%);
+  --shadow-dropdown: 0 4px 16px rgb(0 0 0 / 20%);
+
+  /* Transitions */
+  --transition-fast:   0.1s ease;
+  --transition-normal: 0.2s ease;
+  --transition-slow:   0.3s ease;
+}
+
+/* ============================================
+   SEMANTIC ELEMENT STYLES
+   ============================================ */
+html {
+  font-family: var(--font-family-base);
+  font-size: 16px;
+  color: var(--color-fg-primary);
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-family-base);
+  background: var(--color-bg-canvas);
+  color: var(--color-fg-primary);
+}
+
+h1, .h1 {
+  font-family: var(--font-family-base);
+  font-size: var(--font-size-xxl);
+  font-weight: var(--font-weight-bold);
+  line-height: var(--line-height-tight);
+  color: var(--color-fg-primary);
+  margin: 0 0 var(--space-md);
+  letter-spacing: -0.005em;
+}
+h2, .h2 {
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-bold);
+  line-height: var(--line-height-normal);
+  color: var(--color-fg-primary);
+  margin: 0 0 var(--space-sm);
+}
+h3, .h3 {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-bold);
+  line-height: var(--line-height-normal);
+  color: var(--color-fg-primary);
+  margin: 0 0 var(--space-xs);
+}
+.eyebrow {
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-bold);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-fg-primary);
+}
+p {
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-relaxed);
+  color: var(--color-fg-secondary);
+  margin: 0 0 var(--space-md);
+}
+small, .caption {
+  font-size: var(--font-size-xs);
+  color: var(--color-fg-muted);
+}
+.label {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-fg-primary);
+}
+.stat-number {
+  font-size: var(--font-size-xxl);
+  font-weight: var(--font-weight-bold);
+  line-height: 1;
+}
+a, .link {
+  color: var(--color-fg-link);
+  text-decoration: none;
+}
+a:hover { opacity: 0.8; }
+code, .mono {
+  font-family: var(--font-family-mono);
+  font-weight: var(--font-weight-semibold);
+}

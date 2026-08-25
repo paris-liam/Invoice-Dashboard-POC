@@ -1,0 +1,1672 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="_ds/fms-design-system-019ddf17-7b6e-70b0-a01e-c6eddff138f4/colors_and_type.css">
+<script src="_ds/fms-design-system-019ddf17-7b6e-70b0-a01e-c6eddff138f4/_ds_bundle.js"></script>
+<style>
+  html, body { margin:0; padding:0; height:100%; background: var(--gray-1); }
+  a { color: var(--cotton-candy--500); text-decoration: none; }
+  a:hover { opacity: .8; }
+  * { box-sizing: border-box; }
+  input, select, button, textarea { font-family: Quicksand, sans-serif; }
+  input[type="search"]::placeholder { color: var(--gray-6); opacity: 1; }
+  @keyframes dc-drawer-in { from { transform: translateX(24px); opacity: 0; } to { transform: none; opacity: 1; } }
+  @media (prefers-reduced-motion: reduce) { * { animation: none !important; } }
+</style>
+</helmet>
+<div style="display:grid; grid-template-rows:1fr; height:100vh; background:var(--gray-1); font-family:Quicksand, sans-serif; color:var(--blueberry-pie--500); overflow:hidden;">
+  <main style="overflow:hidden; min-width:0;">
+    <div style="display:flex; flex-direction:column; box-sizing:border-box; height:100%; margin:0; padding:var(--space-xs); gap:var(--space-sm); font-family:Quicksand, sans-serif;">
+
+      <div style="display:flex; flex-wrap:wrap; align-items:center; margin-bottom:var(--space-xs); gap:var(--space-xs); flex-shrink:0;">
+        <h1 style="margin:0; font-size:var(--font-size-xxl); font-weight:700; line-height:1; text-align:left; color:var(--blueberry-pie--500);">Financial Dashboard &mdash; Payments</h1>
+      </div>
+
+      <div style="display:flex; align-items:stretch; gap:var(--space-md); flex-shrink:0;">
+
+        <div style="flex:5; display:flex; flex-direction:column; gap:var(--space-xxs); min-width:0;">
+          <div style="display:flex; align-items:center; gap:var(--space-sm); min-height:18px;">
+            <span style="font-size:var(--font-size-xs); font-weight:700; letter-spacing:.08em; color:var(--gray-6);">MONEY OWED <span style="font-weight:600; letter-spacing:0; color:var(--gray-5);">&#40;{{ billingPeriodLabel }}&#41;</span></span>
+          </div>
+          <div style="display:grid; grid-template-columns:1fr 1fr 1fr 1fr; gap:var(--space-sm);">
+            <sc-for list="{{ moneyKpis }}" as="kpi" hint-placeholder-count="3">
+              <button onClick="{{ kpi.onClick }}" aria-pressed="{{ kpi.active }}" style="{{ kpi.style }}">
+                <span style="font-size:var(--font-size-xs); font-weight:600; opacity:.9; letter-spacing:.02em;">{{ kpi.label }}</span>
+                <span style="font-size:var(--font-size-xl); font-weight:700; font-variant-numeric:tabular-nums; line-height:1;">{{ kpi.value }}</span>
+                <span style="font-size:var(--font-size-xxs); font-weight:600; opacity:.9;">{{ kpi.sub }}</span>
+              </button>
+            </sc-for>
+            <button onClick="{{ onClearFilters }}" style="{{ clearFiltersStyle }}">
+              <span style="display:flex; align-items:center; gap:6px; font-size:var(--font-size-xs); font-weight:700;">
+                <svg width="14" height="14" viewBox="0 0 32 32" fill="currentColor" aria-hidden="true"><path d="M18 28A12 12 0 1 0 6 16H4a14 14 0 1 1 14 14Z"></path><path d="M9 9v8h8v-2h-6V9z"></path></svg>
+                {{ clearFiltersLabel }}
+              </span>
+              <span style="font-size:var(--font-size-xs); font-weight:600; color:var(--gray-5); font-variant-numeric:tabular-nums;">{{ allInvoicesLabel }}</span>
+            </button>
+          </div>
+          <div style="display:flex; align-items:center; gap:var(--space-md); padding-top:var(--space-xxs);">
+            <span style="font-size:var(--font-size-xs); font-weight:700; letter-spacing:.06em; color:var(--gray-5);">STATUS</span>
+            <sc-for list="{{ statusLegend }}" as="item" hint-placeholder-count="4">
+              <span style="display:flex; align-items:center; gap:6px;">
+                <span style="{{ item.iconStyle }}"><svg width="14" height="14" viewBox="0 0 32 32" fill="currentColor" aria-hidden="true"><path d="{{ item.path }}"></path></svg></span>
+                <span style="font-size:var(--font-size-xs); font-weight:600; color:var(--gray-6);">{{ item.label }}</span>
+              </span>
+            </sc-for>
+          </div>
+        </div>
+
+        <div style="width:1px; margin-top:22px; background:var(--gray-3); flex-shrink:0;"></div>
+
+        <div style="flex:3; display:flex; flex-direction:column; gap:var(--space-xxs); min-width:0;">
+          <div style="display:flex; align-items:center; gap:var(--space-sm); min-height:18px;">
+            <span style="font-size:var(--font-size-xxs); font-weight:700; letter-spacing:.08em; color:var(--gray-5);">NEEDS ATTENTION</span>
+            <button onClick="{{ onClearExceptionFilter }}" style="{{ clearExceptionStyle }}">
+              <svg width="12" height="12" viewBox="0 0 32 32" fill="currentColor" aria-hidden="true"><path d="M18 28A12 12 0 1 0 6 16H4a14 14 0 1 1 14 14Z"></path><path d="M9 9v8h8v-2h-6V9z"></path></svg>
+              {{ clearExceptionLabel }}
+            </button>
+          </div>
+          <div style="display:grid; grid-template-columns:repeat(2, 1fr); gap:var(--space-xs);">
+            <sc-for list="{{ exceptionKpis }}" as="kpi" hint-placeholder-count="2">
+              <button onClick="{{ kpi.onClick }}" aria-pressed="{{ kpi.active }}" style="{{ kpi.style }}">
+                <span style="font-size:var(--font-size-xxs); font-weight:700; letter-spacing:.02em; color:var(--gray-6);">{{ kpi.label }}</span>
+                <span style="{{ kpi.valueStyle }}">{{ kpi.value }}<span style="font-size:var(--font-size-xxs); font-weight:600; color:var(--gray-5);">{{ kpi.sub }}</span></span>
+              </button>
+            </sc-for>
+          </div>
+        </div>
+      </div>
+
+      <div style="display:flex; flex:1; flex-direction:column; min-width:0; min-height:0; overflow:hidden;">
+
+        <div style="display:flex; flex-wrap:wrap; align-items:center; gap:.75rem; padding:var(--space-sm) var(--space-md); border:none; border-radius:var(--radius-md); background:var(--blueberry-pie--500); color:#fff; box-shadow:var(--shadow-sm); margin-bottom:var(--space-xs);">
+
+          <div style="position:relative; display:flex; flex-direction:row; flex:0 1 320px; min-width:0; max-width:340px;">
+            <button onClick="{{ onToggleCategory }}" style="display:flex; align-items:center; gap:.25rem; padding:var(--space-xxs) var(--space-sm); border:none; border-radius:var(--radius-xs-plus) 0 0 var(--radius-xs-plus); font-size:var(--font-size-xs); font-weight:700; white-space:nowrap; color:#fff; background:var(--cotton-candy--500); cursor:pointer;" style-hover="background:var(--cotton-candy--600);">
+              {{ categoryLabel }}
+              <svg width="14" height="14" viewBox="0 0 32 32" fill="currentColor" aria-hidden="true"><path d="M16 22L6 12l1.4-1.4 8.6 8.6 8.6-8.6L26 12z"></path></svg>
+            </button>
+            <sc-if value="{{ categoryOpen }}" hint-placeholder-val="{{ false }}">
+              <div role="listbox" style="position:absolute; top:calc(100% + var(--space-xxs)); left:0; z-index:1009; min-width:9rem; border:1px solid var(--gray-2); border-radius:var(--radius-xs-plus); background:#fff; box-shadow:var(--shadow-md); overflow:hidden;">
+                <sc-for list="{{ categories }}" as="cat" hint-placeholder-count="3">
+                  <button role="option" onClick="{{ cat.onPick }}" style="{{ cat.style }}">{{ cat.label }}</button>
+                </sc-for>
+              </div>
+            </sc-if>
+            <input type="search" placeholder="{{ searchPlaceholder }}" value="{{ search }}" onChange="{{ onSearch }}" aria-label="Search invoices" style="padding:var(--space-xxs) var(--space-sm); border:none; border-radius:0 var(--radius-xs-plus) var(--radius-xs-plus) 0; background:#fff; color:var(--blueberry-pie--500); font-size:var(--font-size-xs); font-weight:600; flex:1; min-width:0;">
+          </div>
+
+          <button onClick="{{ onExpandAll }}" style="padding:6px 14px; border:1px solid rgb(255 255 255 / 45%); border-radius:var(--radius-xs-plus); font-family:inherit; font-size:var(--font-size-xs); font-weight:700; color:#fff; background:transparent; cursor:pointer; white-space:nowrap;" style-hover="background:rgb(255 255 255 / 12%);">{{ expandAllLabel }}</button>
+
+          <span style="margin-left:auto; font-size:var(--font-size-xs); font-weight:700; color:#fff; white-space:nowrap;">{{ rowCountLabel }}</span>
+        </div>
+
+        <div style="{{ selectionBarStyle }}">
+          <sc-if value="{{ hasSelection }}" hint-placeholder-val="{{ false }}">
+            <div style="display:flex; align-items:center; gap:var(--space-sm); width:100%;">
+              <span style="font-size:var(--font-size-base); font-weight:700;">{{ selectionLabel }}</span>
+              <span style="font-size:var(--font-size-xs); font-weight:600; color:var(--gray-6);">{{ selectionTotal }}</span>
+              <span style="margin-left:auto;"></span>
+              <button onClick="{{ onBatchResend }}" style="{{ batchResendStyle }}">Resend invoices</button>
+              <button onClick="{{ onBatchDeposit }}" style="{{ batchDepositStyle }}">Deposit payments</button>
+              <button onClick="{{ onClearSelection }}" style="padding:6px 14px; border:1px solid var(--gray-4); border-radius:var(--radius-xs); font-size:var(--font-size-xs); font-weight:600; color:var(--gray-7); background:#fff; cursor:pointer;" style-hover="background:var(--gray-2);">Clear</button>
+            </div>
+          </sc-if>
+          <sc-if value="{{ noSelection }}" hint-placeholder-val="{{ true }}">
+            <button onClick="{{ onToggleAll }}" style="display:flex; align-items:center; gap:var(--space-xs); padding:0; border:none; background:transparent; cursor:pointer; font-family:inherit;">
+              <span style="{{ selectAllBoxStyle }}"><svg width="12" height="12" viewBox="0 0 32 32" fill="currentColor" aria-hidden="true" style="{{ selectAllTickStyle }}"><path d="M13 24 4 15l1.4-1.4L13 21.2 26.6 7.6 28 9z"></path></svg></span>
+              <span style="font-size:var(--font-size-xs); font-weight:700; color:var(--gray-6);">{{ selectAllLabel }}</span>
+            </button>
+          </sc-if>
+        </div>
+
+        <div style="display:flex; flex-direction:column; width:100%; flex:1; min-height:0; overflow:hidden; background:#fff; border:1px solid rgb(0 40 85 / 15%); color:var(--blueberry-pie--500);">
+          <div style="flex:1; min-height:0; overflow:auto;">
+            <div style="{{ tableInnerStyle }}">
+              <div style="{{ headerStyle }}">
+                <div style="display:flex; align-items:center; justify-content:center; height:100%;"><input type="checkbox" checked="{{ allChecked }}" ref="{{ headerCheckboxRef }}" onChange="{{ onToggleAll }}" aria-label="{{ selectAllLabel }}" title="{{ selectAllLabel }}" style="width:15px; height:15px; accent-color:var(--blueberry-pie--200); cursor:pointer;"></div>
+                <sc-for list="{{ columns }}" as="col" hint-placeholder-count="11">
+                  <div onClick="{{ col.onSort }}" style="{{ col.style }}">{{ col.label }}<svg width="12" height="12" viewBox="0 0 32 32" fill="currentColor" aria-hidden="true" style="{{ col.arrowStyle }}"><path d="M16 22L6 12l1.4-1.4 8.6 8.6 8.6-8.6L26 12z"></path></svg></div>
+                </sc-for>
+              </div>
+
+              <sc-for list="{{ rows }}" as="row" hint-placeholder-count="12">
+                <div>
+                  <sc-if value="{{ row.isInvoice }}" hint-placeholder-val="{{ true }}">
+                    <div style="{{ row.style }}">
+                      <div style="display:flex; align-items:center; justify-content:center; height:100%;">
+                        <sc-if value="{{ row.selectable }}" hint-placeholder-val="{{ true }}">
+                          <input type="checkbox" checked="{{ row.checked }}" onChange="{{ row.onToggle }}" aria-label="{{ row.selectLabel }}" style="width:15px; height:15px; accent-color:var(--blueberry-pie--200); cursor:pointer;">
+                        </sc-if>
+                      </div>
+                      <div style="display:flex; align-items:center; justify-content:center; height:100%;" title="{{ row.statusTitle }}"><span style="{{ row.iconStyle }}"><svg width="16" height="16" viewBox="0 0 32 32" fill="currentColor" aria-hidden="true"><path d="{{ row.iconPath }}"></path></svg></span></div>
+                      <div style="display:flex; align-items:center; justify-content:center; height:100%;">
+                        <sc-if value="{{ row.hasPayments }}" hint-placeholder-val="{{ true }}">
+                          <button onClick="{{ row.onToggleExpand }}" aria-label="{{ row.expandLabel }}" style="width:24px; height:24px; display:grid; place-items:center; border:none; background:transparent; color:var(--gray-6); cursor:pointer;"><svg width="14" height="14" viewBox="0 0 32 32" fill="currentColor" aria-hidden="true" style="{{ row.chevronStyle }}"><path d="M16 22L6 12l1.4-1.4 8.6 8.6 8.6-8.6L26 12z"></path></svg></button>
+                        </sc-if>
+                      </div>
+                      <div style="padding:0 12px; display:flex; align-items:center; white-space:nowrap;"><button onClick="{{ row.onOpen }}" style="color:var(--cotton-candy--500); font-weight:600; background:none; border:none; padding:0; font-family:inherit; font-size:inherit; cursor:pointer;" style-hover="text-decoration:underline;">{{ row.id }}</button></div>
+                      <div style="padding:0 12px; display:flex; align-items:center; font-weight:700; white-space:nowrap;">{{ row.payor }}</div>
+                      <div style="padding:0 12px; display:flex; align-items:center; white-space:nowrap;"><button onClick="{{ row.onOpenFamily }}" style="padding:0; border:none; background:none; font-family:inherit; font-size:inherit; font-weight:inherit; color:inherit; text-align:left; cursor:pointer;" style-hover="text-decoration:underline;">{{ row.family }}</button></div>
+                      <div style="{{ row.dueStyle }}">{{ row.dueDate }}</div>
+                      <div style="padding:0 12px; display:flex; align-items:center; font-variant-numeric:tabular-nums; white-space:nowrap;">{{ row.amount }}</div>
+                      <div style="padding:0 12px; display:flex; align-items:center; font-variant-numeric:tabular-nums; color:var(--gray-6); white-space:nowrap;">{{ row.paid }}</div>
+                      <div style="padding:0 12px; display:flex; align-items:center; font-variant-numeric:tabular-nums; font-weight:700; white-space:nowrap;">{{ row.balance }}</div>
+                      <div style="padding:0 12px; display:flex; align-items:center; gap:6px; white-space:nowrap;">
+                        <span style="{{ row.statusStyle }}">{{ row.statusLabel }}</span>
+                        <sc-if value="{{ row.autoPay }}" hint-placeholder-val="{{ false }}">
+                          <span style="padding:2px 6px; border:1px solid var(--cotton-candy--500); border-radius:var(--radius-sm); font-size:var(--font-size-xxs); font-weight:700; color:var(--cotton-candy--700);">AutoPay</span>
+                        </sc-if>
+                      </div>
+                      <div style="padding:0 12px; display:flex; align-items:center; justify-content:flex-start;">
+                        <button onClick="{{ row.onOpenMenu }}" aria-label="{{ row.menuLabel }}" title="{{ row.menuLabel }}" style="{{ row.menuBtnStyle }}">
+                          <svg width="18" height="18" viewBox="0 0 32 32" fill="currentColor" aria-hidden="true"><circle cx="16" cy="8" r="2"></circle><circle cx="16" cy="16" r="2"></circle><circle cx="16" cy="24" r="2"></circle></svg>
+                        </button>
+                      </div>
+                    </div>
+                  </sc-if>
+                  <sc-if value="{{ row.isPayment }}" hint-placeholder-val="{{ false }}">
+                    <div style="display:flex; align-items:center; gap:var(--space-sm); height:38px; padding-right:12px; background:var(--gray-1); border-bottom:1px solid rgb(0 40 85 / 10%); font-size:12px;">
+                      <div style="width:44px; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+                        <sc-if value="{{ row.selectable }}" hint-placeholder-val="{{ false }}">
+                          <input type="checkbox" checked="{{ row.checked }}" onChange="{{ row.onToggle }}" aria-label="{{ row.selectLabel }}" style="width:15px; height:15px; accent-color:var(--blueberry-pie--200); cursor:pointer;">
+                        </sc-if>
+                      </div>
+                      <span style="width:52px; display:flex; justify-content:flex-end; color:var(--gray-4); flex-shrink:0;"><svg width="14" height="14" viewBox="0 0 32 32" fill="currentColor" aria-hidden="true"><path d="M14 26H8V6H6v20a2 2 0 0 0 2 2h6zM10 15h16v2H10z"></path></svg></span>
+                      <span style="{{ row.iconStyle }}"><svg width="14" height="14" viewBox="0 0 32 32" fill="currentColor" aria-hidden="true"><path d="{{ row.iconPath }}"></path></svg></span>
+                      <span style="font-weight:700; white-space:nowrap;">{{ row.method }}</span>
+                      <span style="font-weight:600; color:var(--gray-5); white-space:nowrap;">{{ row.reference }}</span>
+                      <span style="font-weight:600; color:var(--gray-6); white-space:nowrap;">{{ row.date }}</span>
+                      <span style="font-weight:700; font-variant-numeric:tabular-nums; white-space:nowrap;">{{ row.amount }}</span>
+                      <span style="{{ row.statusStyle }}">{{ row.statusLabel }}</span>
+                      <span style="flex:1; min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; font-weight:600; color:var(--gray-6);">{{ row.detail }}</span>
+                      <button onClick="{{ row.onOpenMenu }}" aria-label="{{ row.menuLabel }}" title="{{ row.menuLabel }}" style="{{ row.menuBtnStyle }}">
+                        <svg width="18" height="18" viewBox="0 0 32 32" fill="currentColor" aria-hidden="true"><circle cx="16" cy="8" r="2"></circle><circle cx="16" cy="16" r="2"></circle><circle cx="16" cy="24" r="2"></circle></svg>
+                      </button>
+                    </div>
+                  </sc-if>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+          <div style="display:flex; align-items:center; gap:18px; padding:8px 12px; border-top:1px solid rgb(0 40 85 / 15%); font-size:12px; font-weight:600; background:#fff;">
+            <span style="font-weight:700;">Total shown<span style="font-weight:700; font-variant-numeric:tabular-nums; margin-left:6px;">{{ footerTotal }}</span></span>
+            <span style="color:var(--gray-5);">{{ footerOutstanding }}</span>
+            <span style="margin-left:auto;">{{ paginationLabel }}</span>
+            <span style="opacity:.35; letter-spacing:2px;">&#8676; &#8592; &#8594; &#8677;</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <sc-if value="{{ menuOpen }}" hint-placeholder-val="{{ false }}">
+    <div onClick="{{ onCloseMenu }}" style="position:fixed; inset:0; z-index:1159;"></div>
+    <div role="menu" style="{{ menuStyle }}">
+      <sc-for list="{{ menuItems }}" as="item" hint-placeholder-count="2">
+        <button role="menuitem" onClick="{{ item.onPick }}" style="{{ item.style }}" style-hover="background:var(--gray-2);">{{ item.label }}</button>
+      </sc-for>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ ledgerOpen }}" hint-placeholder-val="{{ false }}">
+    <div style="position:fixed; inset:0; z-index:1200; display:flex; align-items:center; justify-content:center; background:rgb(0 0 0 / 50%);">
+      <div role="dialog" aria-modal="true" style="width:min(34rem, 92vw); padding:var(--space-lg); border-radius:10px; background:var(--blueberry-pie--500);">
+        <div style="display:flex; justify-content:space-between; align-items:center; padding-bottom:var(--space-xs);">
+          <h2 style="margin:0; font-size:var(--font-size-xl); font-weight:700; color:#fff;">Invoices can't be edited</h2>
+          <button onClick="{{ onCloseLedger }}" aria-label="Close" style="display:grid; place-items:center; width:var(--space-lg); height:var(--space-lg); padding:0; border:1px solid #fff; background:transparent; color:#fff; font-size:12px; line-height:1; cursor:pointer;">&#10005;</button>
+        </div>
+        <div style="background:#fff; padding:var(--space-md); display:flex; flex-direction:column; gap:var(--space-sm);">
+          <p style="margin:0; font-size:var(--font-size-base); line-height:1.5; color:var(--gray-6);">The family ledger is the source of truth for charges and credits. Changes you make there won't alter an invoice that's already been generated &mdash; you'll need to generate a new invoice for the corrected amount.</p>
+          <label style="display:flex; align-items:center; gap:var(--space-xs); font-size:var(--font-size-xs); font-weight:700; color:var(--blueberry-pie--500); cursor:pointer;">
+            <input type="checkbox" checked="{{ ledgerSuppressChecked }}" onChange="{{ onToggleLedgerSuppress }}" style="width:15px; height:15px; accent-color:var(--blueberry-pie--200); cursor:pointer;">
+            Don't show this again
+          </label>
+        </div>
+        <div style="display:flex; justify-content:flex-end; align-items:center; gap:var(--space-md); padding:1rem 0 0;">
+          <button onClick="{{ onCloseLedger }}" style="height:2rem; padding:0 2rem; border:none; border-radius:35px; font-family:inherit; font-size:var(--font-size-base); font-weight:700; color:var(--blueberry-pie--500); background:var(--toasted-marshmallow--500); cursor:pointer;" style-hover="background:var(--toasted-marshmallow--700);">Back to invoice</button>
+          <button onClick="{{ onOpenLedgerConfirm }}" style="height:2rem; padding:0 2rem; border:none; border-radius:35px; font-family:inherit; font-size:var(--font-size-base); font-weight:700; color:#fff; background:var(--cotton-candy--500); cursor:pointer;" style-hover="background:var(--cotton-candy--300);">Open family ledger</button>
+        </div>
+      </div>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ drawerOpen }}" hint-placeholder-val="{{ false }}">
+    <div onClick="{{ onCloseDrawer }}" style="position:fixed; inset:0; z-index:1150; background:rgb(0 0 0 / 40%);"></div>
+    <aside role="dialog" aria-modal="true" aria-label="{{ drawerTitle }}" style="{{ drawerStyle }}">
+      <div style="display:flex; align-items:center; flex-wrap:wrap; gap:var(--space-xs) var(--space-sm); padding:var(--space-md); background:var(--blueberry-pie--500); color:#fff;">
+        <sc-if value="{{ drawerHasBack }}" hint-placeholder-val="{{ false }}">
+          <button onClick="{{ onDrawerBack }}" style="display:flex; align-items:center; gap:4px; width:100%; padding:0; border:none; background:none; font-family:inherit; font-size:var(--font-size-xs); font-weight:700; color:#fff; opacity:.85; cursor:pointer;" style-hover="opacity:1; text-decoration:underline;">
+            <svg width="12" height="12" viewBox="0 0 32 32" fill="currentColor" aria-hidden="true" style="transform:rotate(90deg);"><path d="M16 22L6 12l1.4-1.4 8.6 8.6 8.6-8.6L26 12z"></path></svg>
+            {{ drawerBackLabel }}
+          </button>
+        </sc-if>
+        <span style="font-size:var(--font-size-lg); font-weight:700;">{{ drawerTitle }}</span>
+        <sc-if value="{{ drawerIsInvoice }}" hint-placeholder-val="{{ true }}">
+          <span style="{{ drawerStatusStyle }}">{{ drawerStatus }}</span>
+        </sc-if>
+        <button onClick="{{ onCloseDrawer }}" aria-label="Close" style="display:grid; place-items:center; width:28px; height:28px; margin-left:auto; padding:0; border:1px solid rgb(255 255 255 / 60%); border-radius:var(--radius-xs-plus); background:transparent; color:#fff; font-size:12px; line-height:1; cursor:pointer;" style-hover="background:rgb(255 255 255 / 18%);">&#10005;</button>
+      </div>
+      <div style="flex:1; min-height:0; overflow:auto; padding:var(--space-md);">
+        <sc-if value="{{ drawerIsInvoice }}" hint-placeholder-val="{{ true }}">
+          <div>
+            <div style="font-size:var(--font-size-lg); font-weight:700;">{{ drawerPayor }}</div>
+            <div style="font-size:var(--font-size-xs); font-weight:600; color:var(--gray-6);">{{ drawerEmail }}</div>
+            <div style="display:flex; align-items:center; gap:6px; padding-top:var(--space-xxs); font-size:var(--font-size-xs); font-weight:600;">
+              <button onClick="{{ onOpenFamilyFromInvoice }}" style="padding:0; border:none; background:none; font-family:inherit; font-size:inherit; font-weight:700; color:var(--cotton-candy--500); cursor:pointer;" style-hover="text-decoration:underline;">{{ drawerFamily }}</button>
+              <span style="color:var(--gray-5);">&middot;</span>
+              <span style="color:var(--gray-6);">{{ drawerChild }}</span>
+            </div>
+            <div style="padding-top:var(--space-xxs); font-size:var(--font-size-xs); font-weight:600; color:var(--gray-6);">Due <span style="{{ drawerDueStyle }}">{{ drawerDue }}</span></div>
+
+            <sc-if value="{{ drawerAutoPay }}" hint-placeholder-val="{{ false }}">
+              <div style="margin-top:var(--space-md); padding:var(--space-xs) var(--space-sm); border-left:3px solid var(--cotton-candy--500); background:var(--gray-1); font-size:var(--font-size-xs); font-weight:700; color:var(--cotton-candy--700);">{{ drawerAutoPayLabel }}</div>
+            </sc-if>
+
+            <div style="margin-top:var(--space-md); font-size:var(--font-size-xxs); font-weight:700; letter-spacing:.08em; color:var(--gray-5);">CHARGES</div>
+            <sc-for list="{{ drawerLines }}" as="line" hint-placeholder-count="2">
+              <div style="display:flex; align-items:center; gap:var(--space-sm); padding:var(--space-xs) 0; border-bottom:1px solid var(--gray-2);">
+                <div style="flex:1; min-width:0; font-size:var(--font-size-xs); font-weight:700;">{{ line.label }}</div>
+                <div style="{{ line.amountStyle }}">{{ line.amount }}</div>
+              </div>
+            </sc-for>
+            <div style="display:flex; align-items:center; gap:var(--space-sm); padding:var(--space-xs) 0;">
+              <div style="flex:1; font-size:var(--font-size-xs); font-weight:700; color:var(--gray-6);">Invoice total</div>
+              <div style="font-size:var(--font-size-xs); font-weight:700; font-variant-numeric:tabular-nums; color:var(--gray-6);">{{ drawerTotal }}</div>
+            </div>
+
+            <div style="margin-top:var(--space-md); font-size:var(--font-size-xxs); font-weight:700; letter-spacing:.08em; color:var(--gray-5);">PAYMENTS</div>
+            <sc-if value="{{ drawerNoPayments }}" hint-placeholder-val="{{ false }}">
+              <div style="padding:var(--space-xs) 0; font-size:var(--font-size-xs); font-weight:600; color:var(--gray-5);">No payments recorded</div>
+            </sc-if>
+            <sc-for list="{{ drawerPayments }}" as="p" hint-placeholder-count="2">
+              <div style="display:flex; align-items:center; gap:var(--space-xs); padding:var(--space-xs) 0; border-bottom:1px solid var(--gray-2);">
+                <span style="{{ p.iconStyle }}"><svg width="14" height="14" viewBox="0 0 32 32" fill="currentColor" aria-hidden="true"><path d="{{ p.iconPath }}"></path></svg></span>
+                <div style="flex:1; min-width:0;">
+                  <div style="font-size:var(--font-size-xs); font-weight:700; white-space:nowrap;">{{ p.method }} <span style="font-weight:600; color:var(--gray-5);">{{ p.reference }}</span></div>
+                  <div style="font-size:var(--font-size-xxs); font-weight:600; color:var(--gray-5);">{{ p.detail }}</div>
+                </div>
+                <div style="font-size:var(--font-size-xs); font-weight:700; font-variant-numeric:tabular-nums; white-space:nowrap;">{{ p.amount }}</div>
+                <button onClick="{{ p.onOpenMenu }}" aria-label="{{ p.menuLabel }}" style="{{ p.menuBtnStyle }}"><svg width="16" height="16" viewBox="0 0 32 32" fill="currentColor" aria-hidden="true"><circle cx="16" cy="8" r="2"></circle><circle cx="16" cy="16" r="2"></circle><circle cx="16" cy="24" r="2"></circle></svg></button>
+              </div>
+            </sc-for>
+
+            <sc-if value="{{ drawerHasCredits }}" hint-placeholder-val="{{ false }}">
+              <div style="margin-top:var(--space-md); font-size:var(--font-size-xxs); font-weight:700; letter-spacing:.08em; color:var(--gray-5);">CREDITS</div>
+              <sc-for list="{{ drawerCredits }}" as="c" hint-placeholder-count="1">
+                <div style="display:flex; align-items:center; gap:var(--space-sm); padding:var(--space-xs) 0; border-bottom:1px solid var(--gray-2);">
+                  <div style="flex:1; min-width:0;">
+                    <div style="font-size:var(--font-size-xs); font-weight:700;">{{ c.label }}</div>
+                    <div style="font-size:var(--font-size-xxs); font-weight:600; color:var(--gray-5);">{{ c.date }}</div>
+                  </div>
+                  <div style="font-size:var(--font-size-xs); font-weight:700; font-variant-numeric:tabular-nums; color:var(--danger-700);">{{ c.amount }}</div>
+                </div>
+              </sc-for>
+            </sc-if>
+
+            <div style="display:flex; align-items:center; gap:var(--space-sm); margin-top:var(--space-xs); padding:var(--space-xs) 0; border-top:2px solid var(--blueberry-pie--500);">
+              <div style="flex:1; font-size:var(--font-size-base); font-weight:700;">Balance due</div>
+              <div style="font-size:var(--font-size-base); font-weight:700; font-variant-numeric:tabular-nums;">{{ drawerBalance }}</div>
+            </div>
+
+            <div style="margin-top:var(--space-md); font-size:var(--font-size-xxs); font-weight:700; letter-spacing:.08em; color:var(--gray-5);">ACTIVITY</div>
+            <sc-for list="{{ drawerActivity }}" as="a" hint-placeholder-count="2">
+              <div style="padding-top:var(--space-xxs); font-size:var(--font-size-xs); font-weight:600; color:var(--gray-6);">{{ a }}</div>
+            </sc-for>
+
+            <div style="display:flex; flex-direction:column; gap:var(--space-sm); margin-top:var(--space-md); padding-top:var(--space-md); border-top:1px solid var(--gray-3);">
+              <div style="display:flex; align-items:center; gap:var(--space-xs);">
+                <button onClick="{{ onDrawerRecord }}" style="flex:1; padding:10px 14px; border:none; border-radius:35px; font-family:inherit; font-size:var(--font-size-base); font-weight:700; color:#fff; background:var(--blueberry-pie--500); cursor:pointer;" style-hover="background:var(--blueberry-pie--300);">Record payment</button>
+                <button onClick="{{ onDrawerCredit }}" style="{{ drawerCreditBtnStyle }}">Apply credit</button>
+                <button onClick="{{ onDrawerResend }}" style="flex:1; padding:10px 14px; border:1px solid var(--gray-4); border-radius:35px; font-family:inherit; font-size:var(--font-size-base); font-weight:700; color:var(--blueberry-pie--500); background:#fff; cursor:pointer;" style-hover="background:var(--gray-2);">Resend</button>
+              </div>
+              <div style="display:flex; align-items:center; gap:var(--space-md);">
+                <button onClick="{{ onPrint }}" style="display:flex; align-items:center; gap:6px; padding:0; border:none; background:none; font-family:inherit; font-size:var(--font-size-xs); font-weight:700; color:var(--gray-6); cursor:pointer;" style-hover="color:var(--blueberry-pie--500);">
+                  <svg width="14" height="14" viewBox="0 0 32 32" fill="currentColor" aria-hidden="true"><path d="M28 9h-3V4a1 1 0 0 0-1-1H8a1 1 0 0 0-1 1v5H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h3v5a1 1 0 0 0 1 1h16a1 1 0 0 0 1-1v-5h3a2 2 0 0 0 2-2v-9a2 2 0 0 0-2-2ZM9 5h14v4H9Zm14 22H9v-8h14Zm5-7h-3v-3H7v3H4v-9h24Z"></path></svg>
+                  Print
+                </button>
+                <button onClick="{{ onDownload }}" style="display:flex; align-items:center; gap:6px; padding:0; border:none; background:none; font-family:inherit; font-size:var(--font-size-xs); font-weight:700; color:var(--gray-6); cursor:pointer;" style-hover="color:var(--blueberry-pie--500);">
+                  <svg width="14" height="14" viewBox="0 0 32 32" fill="currentColor" aria-hidden="true"><path d="M26 24v4H6v-4H4v4a2 2 0 0 0 2 2h20a2 2 0 0 0 2-2v-4Z"></path><path d="M26 14l-1.41-1.41L17 20.17V2h-2v18.17l-7.59-7.58L6 14l10 10 10-10z"></path></svg>
+                  Download PDF
+                </button>
+                <button onClick="{{ onOpenLedger }}" style="margin-left:auto; padding:0; border:none; background:none; font-family:inherit; font-size:var(--font-size-xs); font-weight:700; color:var(--cotton-candy--500); cursor:pointer;" style-hover="text-decoration:underline;">View family ledger &rarr;</button>
+              </div>
+            </div>
+          </div>
+        </sc-if>
+        <sc-if value="{{ drawerIsFamily }}" hint-placeholder-val="{{ false }}">
+          <div>
+            <div style="display:flex; align-items:center; gap:var(--space-sm);">
+              <div style="font-size:var(--font-size-xs); font-weight:700; color:var(--gray-6);">{{ familyMeta }}</div>
+              <div style="{{ familyCreditStyle }}">{{ familyCreditLabel }}</div>
+            </div>
+            <sc-for list="{{ familyChildren }}" as="kid" hint-placeholder-count="2">
+              <div style="margin-top:var(--space-md);">
+                <div style="display:flex; align-items:baseline; gap:var(--space-xs); padding-bottom:var(--space-xxs); border-bottom:1px solid var(--gray-3);">
+                  <span style="font-size:var(--font-size-base); font-weight:700;">{{ kid.name }}</span>
+                  <span style="font-size:var(--font-size-xxs); font-weight:600; color:var(--gray-5);">{{ kid.childId }}</span>
+                  <span style="margin-left:auto; font-size:var(--font-size-base); font-weight:700; font-variant-numeric:tabular-nums;">{{ kid.total }}</span>
+                </div>
+                <sc-for list="{{ kid.invoices }}" as="row" hint-placeholder-count="2">
+                  <button onClick="{{ row.onOpen }}" style="display:flex; align-items:center; gap:var(--space-xs); width:100%; padding:var(--space-xs) var(--space-xxs); border:none; border-bottom:1px solid var(--gray-2); background:transparent; font-family:inherit; text-align:left; cursor:pointer;" style-hover="background:var(--gray-1);">
+                    <span style="{{ row.iconStyle }}"><svg width="14" height="14" viewBox="0 0 32 32" fill="currentColor" aria-hidden="true"><path d="{{ row.iconPath }}"></path></svg></span>
+                    <span style="font-size:var(--font-size-xs); font-weight:700; color:var(--cotton-candy--500); white-space:nowrap;">{{ row.id }}</span>
+                    <span style="flex:1; min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; font-size:var(--font-size-xs); font-weight:600;">{{ row.payor }}</span>
+                    <span style="{{ row.statusStyle }}">{{ row.statusLabel }}</span>
+                    <span style="font-size:var(--font-size-xs); font-weight:700; font-variant-numeric:tabular-nums; white-space:nowrap;">{{ row.balance }}</span>
+                    <svg width="12" height="12" viewBox="0 0 32 32" fill="currentColor" aria-hidden="true" style="transform:rotate(-90deg); color:var(--gray-5);"><path d="M16 22L6 12l1.4-1.4 8.6 8.6 8.6-8.6L26 12z"></path></svg>
+                  </button>
+                </sc-for>
+              </div>
+            </sc-for>
+            <div style="margin-top:var(--space-md); padding-top:var(--space-md); border-top:1px solid var(--gray-3);">
+              <button onClick="{{ onOpenLedgerFamily }}" style="padding:0; border:none; background:none; font-family:inherit; font-size:var(--font-size-xs); font-weight:700; color:var(--cotton-candy--500); text-align:left; cursor:pointer;" style-hover="text-decoration:underline;">View family ledger &rarr;</button>
+            </div>
+          </div>
+        </sc-if>
+      </div>
+    </aside>
+  </sc-if>
+
+  <sc-if value="{{ formOpen }}" hint-placeholder-val="{{ false }}">
+    <div style="position:fixed; inset:0; z-index:1200; display:flex; align-items:center; justify-content:center; background:rgb(0 0 0 / 50%);">
+      <div role="dialog" aria-modal="true" style="width:min(34rem, 92vw); padding:var(--space-lg); border-radius:10px; background:var(--blueberry-pie--500);">
+        <div style="display:flex; justify-content:space-between; align-items:center; padding-bottom:var(--space-xs);">
+          <h2 style="margin:0; font-size:var(--font-size-xl); font-weight:700; color:#fff;">{{ formHeading }}</h2>
+          <button onClick="{{ onCancelForm }}" aria-label="Close" style="display:grid; place-items:center; width:var(--space-lg); height:var(--space-lg); padding:0; border:1px solid #fff; background:transparent; color:#fff; font-size:12px; line-height:1; cursor:pointer;">&#10005;</button>
+        </div>
+        <div style="background:#fff; padding:var(--space-md); display:flex; flex-direction:column; gap:var(--space-sm);">
+
+          <div style="display:flex; flex-wrap:wrap; gap:var(--space-md);">
+            <sc-for list="{{ formContext }}" as="c" hint-placeholder-count="2">
+              <span style="display:flex; flex-direction:column;">
+                <span style="font-size:var(--font-size-xxs); font-weight:700; letter-spacing:.06em; color:var(--gray-5);">{{ c.label }}</span>
+                <span style="font-size:var(--font-size-base); font-weight:700; font-variant-numeric:tabular-nums;">{{ c.value }}</span>
+              </span>
+            </sc-for>
+          </div>
+
+          <sc-if value="{{ formShowAmount }}" hint-placeholder-val="{{ true }}">
+            <label style="display:flex; flex-direction:column; gap:4px; font-size:var(--font-size-sm); font-weight:700; color:var(--blueberry-pie--500);">
+              Amount
+              <input type="text" inputmode="decimal" value="{{ formAmount }}" onChange="{{ onFormAmount }}" style="width:100%; padding:var(--space-xs); border:1px solid var(--blueberry-pie--500); border-radius:10px; font-size:var(--font-size-base); font-weight:700; color:var(--blueberry-pie--500);">
+            </label>
+          </sc-if>
+
+          <sc-if value="{{ formShowMethod }}" hint-placeholder-val="{{ false }}">
+            <div style="display:flex; flex-direction:column; gap:4px;">
+              <span style="font-size:var(--font-size-sm); font-weight:700; color:var(--blueberry-pie--500);">Method</span>
+              <div style="display:flex;">
+                <sc-for list="{{ formMethods }}" as="m" hint-placeholder-count="3">
+                  <button onClick="{{ m.onPick }}" style="{{ m.style }}">{{ m.label }}</button>
+                </sc-for>
+              </div>
+            </div>
+          </sc-if>
+
+          <sc-if value="{{ formShowDate }}" hint-placeholder-val="{{ false }}">
+            <div style="display:flex; gap:var(--space-sm);">
+              <label style="flex:1; display:flex; flex-direction:column; gap:4px; font-size:var(--font-size-sm); font-weight:700; color:var(--blueberry-pie--500);">
+                Date received
+                <input type="date" value="{{ formDate }}" onChange="{{ onFormDate }}" style="width:100%; padding:var(--space-xs); border:1px solid var(--blueberry-pie--500); border-radius:10px; font-size:var(--font-size-base); color:var(--blueberry-pie--500);">
+              </label>
+              <label style="flex:1; display:flex; flex-direction:column; gap:4px; font-size:var(--font-size-sm); font-weight:700; color:var(--blueberry-pie--500);">
+                Reference
+                <input type="text" value="{{ formReference }}" onChange="{{ onFormReference }}" placeholder="{{ formReferencePlaceholder }}" style="width:100%; padding:var(--space-xs); border:1px solid var(--blueberry-pie--500); border-radius:10px; font-size:var(--font-size-base); color:var(--blueberry-pie--500);">
+              </label>
+            </div>
+          </sc-if>
+
+          <sc-if value="{{ formShowReason }}" hint-placeholder-val="{{ false }}">
+            <label style="display:flex; flex-direction:column; gap:4px; font-size:var(--font-size-sm); font-weight:700; color:var(--blueberry-pie--500);">
+              {{ formReasonLabel }}
+              <textarea rows="3" value="{{ formReason }}" onChange="{{ onFormReason }}" placeholder="{{ formReasonPlaceholder }}" style="width:100%; padding:var(--space-xs); border:1px solid var(--blueberry-pie--500); border-radius:10px; font-size:var(--font-size-base); color:var(--blueberry-pie--500); resize:vertical;"></textarea>
+            </label>
+          </sc-if>
+
+          <sc-if value="{{ formHasNotice }}" hint-placeholder-val="{{ false }}">
+            <span style="{{ formNoticeStyle }}">{{ formNotice }}</span>
+          </sc-if>
+        </div>
+        <div style="display:flex; justify-content:flex-end; align-items:center; gap:var(--space-md); padding:1rem 0 0;">
+          <button onClick="{{ onCancelForm }}" style="height:2rem; padding:0 2rem; border:none; border-radius:35px; font-family:inherit; font-size:var(--font-size-base); font-weight:700; color:var(--blueberry-pie--500); background:var(--toasted-marshmallow--500); cursor:pointer;" style-hover="background:var(--toasted-marshmallow--700);">Cancel</button>
+          <button onClick="{{ onSubmitForm }}" style="{{ formCtaStyle }}">{{ formCta }}</button>
+        </div>
+      </div>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ confirmOpen }}" hint-placeholder-val="{{ false }}">
+    <div style="position:fixed; inset:0; z-index:1200; display:flex; align-items:center; justify-content:center; background:rgb(0 0 0 / 50%);">
+      <div role="dialog" aria-modal="true" style="width:min(32rem, 92vw); padding:var(--space-lg); border-radius:10px; background:var(--blueberry-pie--500);">
+        <div style="display:flex; justify-content:space-between; align-items:center; padding-bottom:var(--space-xs);">
+          <h2 style="margin:0; font-size:var(--font-size-xl); font-weight:700; color:#fff;">{{ confirmHeading }}</h2>
+          <button onClick="{{ onCancelConfirm }}" aria-label="Close" style="display:grid; place-items:center; width:var(--space-lg); height:var(--space-lg); padding:0; border:1px solid #fff; background:transparent; color:#fff; font-size:12px; line-height:1; cursor:pointer;">&#10005;</button>
+        </div>
+        <div style="background:#fff; padding:var(--space-md);">
+          <p style="margin:0; font-size:var(--font-size-base); line-height:1.5; color:var(--gray-6);">{{ confirmBody }}</p>
+        </div>
+        <div style="display:flex; justify-content:flex-end; align-items:center; gap:var(--space-md); padding:1rem 0 0;">
+          <button onClick="{{ onCancelConfirm }}" style="height:2rem; padding:0 2rem; border:none; border-radius:35px; font-family:inherit; font-size:var(--font-size-base); font-weight:700; color:var(--blueberry-pie--500); background:var(--toasted-marshmallow--500); cursor:pointer;" style-hover="background:var(--toasted-marshmallow--700);">Cancel</button>
+          <button onClick="{{ onSubmitConfirm }}" style="{{ confirmCtaStyle }}">{{ confirmCta }}</button>
+        </div>
+      </div>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ toastOpen }}" hint-placeholder-val="{{ false }}">
+    <div role="status" style="position:fixed; left:50%; bottom:28px; transform:translateX(-50%); z-index:1300; display:flex; align-items:center; gap:var(--space-md); padding:var(--space-xs) var(--space-md); border-radius:var(--radius-md); font-size:var(--font-size-sm); font-weight:700; color:#fff; background:var(--blueberry-pie--500); box-shadow:var(--shadow-lg);">
+      <span>{{ toast }}</span>
+      <sc-if value="{{ toastHasUndo }}" hint-placeholder-val="{{ false }}">
+        <button onClick="{{ onUndo }}" style="padding:4px 14px; border:1px solid rgb(255 255 255 / 60%); border-radius:35px; font-family:inherit; font-size:var(--font-size-xs); font-weight:700; color:#fff; background:transparent; cursor:pointer;" style-hover="background:rgb(255 255 255 / 18%);">Undo</button>
+      </sc-if>
+    </div>
+  </sc-if>
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1600,&quot;height&quot;:900}}">
+const TODAY = '2026-08-13';
+
+/* Families carry a credit balance that invoices draw down. */
+const FAMILY_CREDIT = {
+  'Johnson Family':0, 'Garcia Family':0, 'Martinez Family':0, 'Smith Family':125,
+  'Thompson Family':0, 'Anderson Family':0, 'Wilson Family':0, 'Davis Family':0,
+  'Miller Family':0, 'Taylor Family':60, 'Harris Family':0, 'Jackson Family':0,
+  'Lee Family':0, 'Nguyen Family':0,
+};
+
+const PAY = (o) => Object.assign({
+  kind:'electronic', reference:'', refundedAmount:0, code:null, codeLabel:'',
+  deposit:{ state:null, date:null, batch:null },
+}, o);
+
+/* Invoices are per payor, matching Draft Invoices — an approved draft becomes
+   one of these. Billing period Jul 1–31, 2026; TODAY is 13 Aug 2026. */
+const INVOICES = [
+  { id:'INV-1101', payor:'Marcus Johnson', payorEmail:'m.johnson@email.com', family:'Johnson Family', child:'Ava Johnson', childId:'CH-101',
+    dueDate:'2026-07-15', amount:650, autoPay:false,
+    lineItems:[{ label:'Tuition, July', amount:620 }, { label:'Late pickup fee', amount:30 }],
+    credits:[], payments:[ PAY({ id:'PMT-9001', method:'Card', reference:'····4242', date:'2026-07-12', amount:650, status:'Successful', deposit:{ state:'Deposited', date:'2026-07-13', batch:'DEP-2026-0713-1' } }) ] },
+
+  { id:'INV-1102', payor:'Alicia Johnson', payorEmail:'a.johnson@email.com', family:'Johnson Family', child:'Ava Johnson', childId:'CH-101',
+    dueDate:'2026-07-15', amount:433.33, autoPay:false,
+    lineItems:[{ label:'Tuition, July', amount:413.33 }, { label:'Late pickup fee', amount:20 }],
+    credits:[], payments:[ PAY({ id:'PMT-9002', method:'Check', kind:'offline', reference:'#1032', date:'2026-07-10', amount:200, status:'Successful', deposit:{ state:'Awaiting deposit', date:null, batch:null } }) ] },
+
+  { id:'INV-1103', payor:'Elena Garcia', payorEmail:'elena.garcia@email.com', family:'Garcia Family', child:'Mateo Garcia', childId:'CH-102',
+    dueDate:'2026-08-20', amount:825, autoPay:true,
+    lineItems:[{ label:'Tuition, August', amount:825 }],
+    credits:[], payments:[ PAY({ id:'PMT-9003', method:'ACH', reference:'····6789', date:'2026-08-20', amount:825, status:'Scheduled' }) ] },
+
+  { id:'INV-1104', payor:'Rafael Martinez', payorEmail:'r.martinez@email.com', family:'Martinez Family', child:'Lucia Martinez', childId:'CH-103',
+    dueDate:'2026-07-08', amount:950, autoPay:true,
+    lineItems:[{ label:'Tuition, July', amount:900 }, { label:'Late pickup fee', amount:50 }],
+    credits:[], payments:[
+      PAY({ id:'PMT-9004', method:'ACH', reference:'····6789', date:'2026-07-08', amount:950, status:'Failed', code:'R01', codeLabel:'Insufficient funds' }),
+      PAY({ id:'PMT-9005', method:'ACH', reference:'····6789', date:'2026-07-12', amount:950, status:'Failed', code:'R01', codeLabel:'Insufficient funds' }),
+    ] },
+
+  { id:'INV-1105', payor:'Dana Smith', payorEmail:'dana.smith@email.com', family:'Smith Family', child:'Noah Smith', childId:'CH-104',
+    dueDate:'2026-07-05', amount:800, autoPay:false,
+    lineItems:[{ label:'Tuition, July', amount:800 }],
+    credits:[{ label:'Closure day, 4 Jul', amount:50, date:'2026-07-06' }],
+    payments:[ PAY({ id:'PMT-9006', method:'Card', reference:'····1881', date:'2026-07-04', amount:750, status:'Successful', deposit:{ state:'Deposited', date:'2026-07-05', batch:'DEP-2026-0705-1' } }) ] },
+
+  { id:'INV-1106', payor:'Kyle Smith', payorEmail:'kyle.smith@email.com', family:'Smith Family', child:'Noah Smith', childId:'CH-104',
+    dueDate:'2026-07-05', amount:400, autoPay:false,
+    lineItems:[{ label:'Tuition, July', amount:400 }],
+    credits:[], payments:[] },
+
+  { id:'INV-1107', payor:'Priya Thompson', payorEmail:'p.thompson@email.com', family:'Thompson Family', child:'Rohan Thompson', childId:'CH-105',
+    dueDate:'2026-07-02', amount:475, autoPay:false,
+    lineItems:[{ label:'Tuition, July', amount:475 }],
+    credits:[], payments:[ PAY({ id:'PMT-9007', method:'Card', reference:'····9310', date:'2026-07-01', amount:475, status:'Refunded', refundedAmount:475, deposit:{ state:'Deposited', date:'2026-07-02', batch:'DEP-2026-0702-1' } }) ] },
+
+  { id:'INV-1108', payor:'Owen Anderson', payorEmail:'o.anderson@email.com', family:'Anderson Family', child:'Ellie Anderson', childId:'CH-106',
+    dueDate:'2026-08-15', amount:700, autoPay:false,
+    lineItems:[{ label:'Tuition, August', amount:700 }],
+    credits:[], payments:[] },
+
+  { id:'INV-1109', payor:'Grace Wilson', payorEmail:'g.wilson@email.com', family:'Wilson Family', child:'Iris Wilson', childId:'CH-107',
+    dueDate:'2026-07-22', amount:330, autoPay:false,
+    lineItems:[{ label:'Tuition, July', amount:330 }],
+    credits:[], payments:[ PAY({ id:'PMT-9008', method:'Cash', kind:'offline', reference:'Front desk', date:'2026-07-20', amount:330, status:'Successful', deposit:{ state:'Awaiting deposit', date:null, batch:null } }) ] },
+
+  { id:'INV-1110', payor:'Ben Wilson', payorEmail:'ben.wilson@email.com', family:'Wilson Family', child:'Iris Wilson', childId:'CH-107',
+    dueDate:'2026-07-22', amount:220, autoPay:false,
+    lineItems:[{ label:'Tuition, July', amount:220 }],
+    credits:[], payments:[ PAY({ id:'PMT-9009', method:'ACH', reference:'····4501', date:'2026-07-21', amount:220, status:'Pending' }) ] },
+
+  { id:'INV-1111', payor:'Nina Davis', payorEmail:'nina.davis@email.com', family:'Davis Family', child:'Theo Davis', childId:'CH-108',
+    dueDate:'2026-06-25', amount:875, autoPay:false,
+    lineItems:[{ label:'Tuition, June', amount:875 }],
+    credits:[], payments:[] },
+
+  { id:'INV-1112', payor:'Carla Miller', payorEmail:'c.miller@email.com', family:'Miller Family', child:'June Miller', childId:'CH-109',
+    dueDate:'2026-07-10', amount:450, autoPay:false,
+    lineItems:[{ label:'Tuition, July', amount:450 }],
+    credits:[], payments:[ PAY({ id:'PMT-9010', method:'Card', reference:'····7702', date:'2026-07-09', amount:450, status:'Partly refunded', refundedAmount:100, deposit:{ state:'Deposited', date:'2026-07-10', batch:'DEP-2026-0710-1' } }) ] },
+
+  { id:'INV-1113', payor:'Sam Taylor', payorEmail:'sam.taylor@email.com', family:'Taylor Family', child:'Beau Taylor', childId:'CH-110',
+    dueDate:'2026-08-18', amount:660, autoPay:true,
+    lineItems:[{ label:'Tuition, August', amount:660 }],
+    credits:[], payments:[ PAY({ id:'PMT-9011', method:'ACH', reference:'····2245', date:'2026-08-18', amount:660, status:'Scheduled' }) ] },
+
+  { id:'INV-1114', payor:'Jess Taylor', payorEmail:'jess.taylor@email.com', family:'Taylor Family', child:'Beau Taylor', childId:'CH-110',
+    dueDate:'2026-07-18', amount:440, autoPay:false,
+    lineItems:[{ label:'Tuition, July', amount:440 }],
+    credits:[], payments:[ PAY({ id:'PMT-9012', method:'Check', kind:'offline', reference:'#2088', date:'2026-07-16', amount:440, status:'Successful', deposit:{ state:'Awaiting deposit', date:null, batch:null } }) ] },
+
+  { id:'INV-1115', payor:'Alan Harris', payorEmail:'a.harris@email.com', family:'Harris Family', child:'Cora Harris', childId:'CH-111',
+    dueDate:'2026-07-12', amount:625, autoPay:false,
+    lineItems:[{ label:'Tuition, July', amount:687.50 }, { label:'Sibling discount', amount:-62.50 }],
+    credits:[], payments:[ PAY({ id:'PMT-9013', method:'ACH', reference:'····3390', date:'2026-07-12', amount:625, status:'Failed', code:'R02', codeLabel:'Account closed' }) ] },
+
+  { id:'INV-1116', payor:'Renee Jackson', payorEmail:'r.jackson@email.com', family:'Jackson Family', child:'Malik Jackson', childId:'CH-112',
+    dueDate:'2026-06-30', amount:775, autoPay:false,
+    lineItems:[{ label:'Tuition, June', amount:775 }],
+    credits:[{ label:'Goodwill credit', amount:75, date:'2026-07-02' }],
+    payments:[ PAY({ id:'PMT-9014', method:'Card', reference:'····5560', date:'2026-07-02', amount:700, status:'Successful', deposit:{ state:'Deposited', date:'2026-07-03', batch:'DEP-2026-0703-1' } }) ] },
+
+  { id:'INV-1117', payor:'Mei Lee', payorEmail:'mei.lee@email.com', family:'Lee Family', child:'Hana Lee', childId:'CH-113',
+    dueDate:'2026-08-25', amount:475, autoPay:false,
+    lineItems:[{ label:'Tuition, August', amount:475 }],
+    credits:[], payments:[] },
+
+  { id:'INV-1118', payor:'Linh Nguyen', payorEmail:'linh.nguyen@email.com', family:'Nguyen Family', child:'Zoe Nguyen', childId:'CH-116',
+    dueDate:'2026-07-28', amount:540, autoPay:false,
+    lineItems:[{ label:'Tuition, July', amount:540 }],
+    credits:[], payments:[ PAY({ id:'PMT-9015', method:'Card', reference:'····8123', date:'2026-07-27', amount:540, status:'Successful', deposit:{ state:'Awaiting deposit', date:null, batch:null } }) ] },
+];
+
+const round2 = (n) => Math.round(n * 100) / 100;
+const fmtMoney = (n) => (n < 0 ? '-$' : '$') + Math.abs(n).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+
+const MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+function fmtDate(iso) {
+  if (!iso) return '';
+  const p = iso.split('-');
+  return Number(p[2]) + ' ' + MONTHS[Number(p[1]) - 1] + ' ' + p[0];
+}
+
+/* ---- money and status derivation -------------------------------------- */
+
+/* A refunded remainder still counts toward the invoice. */
+function effectiveAmount(p) {
+  if (p.status !== 'Successful' && p.status !== 'Partly refunded') return 0;
+  return round2(p.amount - (p.refundedAmount || 0));
+}
+const paidOf    = (inv) => round2(inv.payments.reduce((a, p) => a + effectiveAmount(p), 0));
+const creditsOf = (inv) => round2((inv.credits || []).reduce((a, c) => a + c.amount, 0));
+const balanceOf = (inv) => round2(inv.amount - paidOf(inv) - creditsOf(inv));
+const isPastDue = (inv) => balanceOf(inv) > 0 && inv.dueDate < TODAY;
+
+/* One status per row. Partly-paid-and-late reads Partly paid; the due date
+   carries the urgency instead of a second pill. */
+function statusOf(inv) {
+  if (balanceOf(inv) <= 0) return 'Paid';
+  if (paidOf(inv) > 0 || creditsOf(inv) > 0) return 'Partly paid';
+  return inv.dueDate < TODAY ? 'Overdue' : 'Open';
+}
+
+const depositable = (p) =>
+  (p.status === 'Successful' || p.status === 'Partly refunded') && p.deposit.state === 'Awaiting deposit';
+
+const refundable = (p) =>
+  (p.status === 'Successful' || p.status === 'Partly refunded') && round2(p.amount - (p.refundedAmount || 0)) > 0;
+
+function paymentDetail(p) {
+  if (p.status === 'Failed') return p.code + ' ' + p.codeLabel;
+  if (p.status === 'Refunded') return 'Refunded in full';
+  if (p.status === 'Partly refunded') return fmtMoney(p.amount) + ', ' + fmtMoney(p.refundedAmount) + ' refunded';
+  if (p.status === 'Scheduled') return 'Scheduled for ' + fmtDate(p.date);
+  if (p.status === 'Pending') return 'Awaiting settlement';
+  if (p.deposit.state === 'Deposited') return 'Deposited ' + fmtDate(p.deposit.date) + ' · ' + p.deposit.batch;
+  if (p.deposit.state === 'Awaiting deposit') return 'Awaiting deposit';
+  return '';
+}
+
+const CATEGORIES = [
+  { id:'any',    label:'ALL',       placeholder:'invoice #, payor or family' },
+  { id:'id',     label:'INVOICE #', placeholder:'invoice number' },
+  { id:'payor',  label:'PAYOR',     placeholder:'payor name' },
+  { id:'family', label:'FAMILY',    placeholder:'family name' },
+];
+
+const COLUMNS = [
+  { field:'status',      label:'',          sortable:true,  center:true },
+  { field:'expand',      label:'',          sortable:false, center:true },
+  { field:'id',          label:'Invoice #', sortable:true },
+  { field:'payor',       label:'Payor',     sortable:true },
+  { field:'family',      label:'Family',    sortable:true },
+  { field:'dueDate',     label:'Due date',  sortable:true },
+  { field:'amount',      label:'Amount',    sortable:true },
+  { field:'paid',        label:'Paid',      sortable:true },
+  { field:'balance',     label:'Balance',   sortable:true },
+  { field:'statusLabel', label:'Status',    sortable:true },
+  { field:'actions',     label:'Actions',   sortable:false },
+];
+
+const SORT_VALUE = {
+  id: (i) => i.id, payor: (i) => i.payor, family: (i) => i.family,
+  dueDate: (i) => i.dueDate, amount: (i) => i.amount,
+  paid: paidOf, balance: balanceOf, statusLabel: statusOf, status: statusOf,
+};
+
+const MATCH = {
+  'Outstanding':      (i) => balanceOf(i) > 0,
+  'Past due':         (i) => isPastDue(i),
+  'Paid':             (i) => balanceOf(i) <= 0,
+  'ACH failures':     (i) => i.payments.some(p => p.status === 'Failed' && p.method === 'ACH'),
+  'Awaiting deposit': (i) => i.payments.some(depositable),
+};
+
+/* Every row is its own grid, so the tracks have to be explicit numbers or the
+   columns drift out of alignment. Widths are measured from the real strings. */
+const CELL_PAD = 24;
+const FONT_CELL = '400 12px Quicksand, sans-serif';
+const FONT_CELL_BOLD = '700 12px Quicksand, sans-serif';
+const FONT_CELL_SEMI = '600 12px Quicksand, sans-serif';
+const FONT_HEAD = '700 13px Quicksand, sans-serif';
+
+let _measureCtx = null;
+function textWidth(text, font) {
+  if (!_measureCtx) _measureCtx = document.createElement('canvas').getContext('2d');
+  _measureCtx.font = font;
+  return _measureCtx.measureText(String(text == null ? '' : text)).width;
+}
+
+function cellMetrics(field, inv) {
+  switch (field) {
+    case 'id':          return [inv.id, FONT_CELL_SEMI, 0];
+    case 'payor':       return [inv.payor, FONT_CELL_BOLD, 0];
+    case 'family':      return [inv.family, FONT_CELL, 0];
+    case 'dueDate':     return [fmtDate(inv.dueDate), FONT_CELL, 0];
+    case 'amount':      return [fmtMoney(inv.amount), FONT_CELL, 0];
+    case 'paid':        return [fmtMoney(paidOf(inv)), FONT_CELL, 0];
+    case 'balance':     return [fmtMoney(balanceOf(inv)), FONT_CELL_BOLD, 0];
+    /* the pill adds 8px of padding either side, plus room for the AutoPay badge */
+    case 'statusLabel': return [statusOf(inv), FONT_CELL_BOLD, inv.autoPay ? 84 : 16];
+    default:            return ['', FONT_CELL, 0];
+  }
+}
+
+const PILL = {
+  Paid:              { color:'var(--gummy-sharks--900)', background:'var(--gummy-sharks--100)' },
+  'Partly paid':     { color:'var(--cotton-candy--700)', background:'var(--cotton-candy--50)' },
+  Open:              { color:'var(--gray-6)',            background:'var(--gray-2)' },
+  Overdue:           { color:'var(--danger-700)',        background:'rgb(238 191 193)' },
+  Successful:        { color:'var(--gummy-sharks--900)', background:'var(--gummy-sharks--100)' },
+  Pending:           { color:'rgb(145 116 16)',          background:'var(--warning-100)' },
+  Failed:            { color:'var(--danger-700)',        background:'rgb(238 191 193)' },
+  Refunded:          { color:'var(--gray-6)',            background:'var(--gray-2)' },
+  'Partly refunded': { color:'var(--gray-6)',            background:'var(--gray-2)' },
+  Scheduled:         { color:'var(--cotton-candy--700)', background:'var(--cotton-candy--50)' },
+};
+
+function pillStyle(v) {
+  return Object.assign({
+    display:'inline-block', padding:'2px 8px', borderRadius:'var(--radius-sm)',
+    fontSize:'var(--font-size-xs)', fontWeight:700, lineHeight:1.4, whiteSpace:'nowrap',
+  }, PILL[v] || { color:'var(--gray-6)', background:'var(--gray-2)' });
+}
+
+/* Carbon icons on a 32px grid. */
+const CIRCLE_CHECK = 'M16 2A14 14 0 1 0 30 16 14 14 0 0 0 16 2ZM14 21.5l-5-4.96L10.59 15 14 18.35 21.41 11 23 12.58Z';
+const CIRCLE_HALF  = 'M16 4A12 12 0 1 0 28 16 12 12 0 0 0 16 4Zm0 22V6a10 10 0 0 1 0 20Z';
+const CIRCLE_OPEN  = 'M16 4A12 12 0 1 0 28 16 12 12 0 0 0 16 4Zm0 22a10 10 0 1 1 10-10 10 10 0 0 1-10 10Z';
+const CIRCLE_WARN  = 'M16 2A14 14 0 1 0 30 16 14 14 0 0 0 16 2Zm-1 7h2v10h-2Zm1 16a1.5 1.5 0 1 1 1.5-1.5A1.5 1.5 0 0 1 16 25Z';
+const CIRCLE_X     = 'M16 2A14 14 0 1 0 30 16 14 14 0 0 0 16 2Zm5.41 19L16 17.41 10.59 21 9 21.41 12.59 16 9 10.59 10.59 9 16 14.59 21.41 9 23 10.59 19.41 16 23 21.41Z';
+const CALENDAR     = 'M26 4h-4V2h-2v2h-8V2h-2v2H6a2 2 0 0 0-2 2v20a2 2 0 0 0 2 2h20a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2Zm0 22H6V12h20ZM6 10V6h4v2h2V6h8v2h2V6h4v4Z';
+
+const INVOICE_ICON = {
+  Paid:          { color:'var(--gummy-sharks--900)', path:CIRCLE_CHECK },
+  'Partly paid': { color:'var(--cotton-candy--700)', path:CIRCLE_HALF },
+  Open:          { color:'var(--gray-5)',            path:CIRCLE_OPEN },
+  Overdue:       { color:'var(--danger-700)',        path:CIRCLE_WARN },
+};
+const PAYMENT_ICON = {
+  Successful:        { color:'var(--gummy-sharks--900)', path:CIRCLE_CHECK },
+  'Partly refunded': { color:'var(--gray-5)',            path:CIRCLE_OPEN },
+  Refunded:          { color:'var(--gray-5)',            path:CIRCLE_OPEN },
+  Pending:           { color:'var(--warning-700)',       path:CIRCLE_HALF },
+  Scheduled:         { color:'var(--cotton-candy--700)', path:CALENDAR },
+  Failed:            { color:'var(--danger-700)',        path:CIRCLE_X },
+};
+
+class Component extends DCLogic {
+  state = {
+    invoices: INVOICES.map(i => Object.assign({}, i)),
+    credit: Object.assign({}, FAMILY_CREDIT),
+    invoiceFilter:'', exceptionFilter:'', search:'', searchCategory:'any',
+    categoryOpen:false, expanded:[],
+    selected:{ invoices:[], payments:[] },
+    sortField:'dueDate', sortDir:'asc',
+    menu:null, drawer:null, ledgerOpen:false, ledgerSuppressed:false,
+    confirm:null, form:null, toast:'', toastUndo:null,
+  };
+
+  componentDidMount() {
+    /* Column widths are measured with canvas; remeasure once Quicksand is live. */
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => this.forceUpdate());
+    /* Escape unwinds one layer at a time: modal first, then drawer. */
+    this.onKeyDown = (e) => {
+      if (e.key !== 'Escape') return;
+      const s = this.state;
+      if (s.ledgerOpen) return this.setState({ ledgerOpen:false });
+      if (s.form) return this.setState({ form:null });
+      if (s.confirm) return this.setState({ confirm:null });
+      if (s.menu) return this.setState({ menu:null });
+      if (s.drawer) return this.closeDrawer();
+    };
+    document.addEventListener('keydown', this.onKeyDown);
+  }
+
+  componentWillUnmount() {
+    document.removeEventListener('keydown', this.onKeyDown);
+  }
+
+  openInvoice(id, backTo) {
+    this.setState({ drawer: { view:'invoice', invoiceId:id, familyName:null, backTo: backTo || null }, menu:null });
+  }
+
+  openFamily(name) {
+    this.setState({ drawer: { view:'family', invoiceId:null, familyName:name, backTo:null }, menu:null });
+  }
+
+  closeDrawer() { this.setState({ drawer:null, menu:null }); }
+
+  /* Suppressed, the link goes straight through to the (stubbed) ledger. */
+  requestLedger() {
+    if (this.state.ledgerSuppressed) return this.showToast('Family ledger — coming next');
+    this.setState({ ledgerOpen: true });
+  }
+
+  /* One shared reference per deposit run, single or bulk. */
+  depositBatchRef() {
+    this.batchSeq = (this.batchSeq || 0) + 1;
+    return 'DEP-' + TODAY.replace(/-/g, '').replace(/^(\d{4})(\d{4})$/, '$1-$2') + '-' + this.batchSeq;
+  }
+
+  /* Single resend is instant: low stakes, high frequency. Bulk confirms. */
+  resendInvoices(ids) {
+    const label = ids.length === 1
+      ? 'Invoice resent to ' + (this.state.invoices.find(i => i.id === ids[0]) || {}).payor
+      : ids.length + ' invoices resent';
+    this.setState({ menu:null, confirm:null });
+    this.showToast(label);
+  }
+
+  depositPayments(ids) {
+    const ref = this.depositBatchRef();
+    this.setState(st => ({
+      confirm: null, menu: null,
+      selected: { invoices: st.selected.invoices, payments: st.selected.payments.filter(p => ids.indexOf(p) === -1) },
+      invoices: st.invoices.map(inv => {
+        if (!inv.payments.some(p => ids.indexOf(p.id) !== -1)) return inv;
+        return Object.assign({}, inv, {
+          payments: inv.payments.map(p => ids.indexOf(p.id) === -1 ? p
+            : Object.assign({}, p, { deposit: { state:'Deposited', date:TODAY, batch:ref } })),
+          log: (inv.log || []).concat(['Deposited ' + fmtDate(TODAY) + ' · ' + ref]),
+        });
+      }),
+    }));
+    this.showToast(ids.length + ' payment' + (ids.length !== 1 ? 's' : '') + ' deposited · ' + ref);
+  }
+
+  openForm(kind, inv, payment) {
+    const bal = balanceOf(inv);
+    const credit = this.state.credit[inv.family] || 0;
+    const start = {
+      record: () => ({ amount: String(bal.toFixed(2)), method:'Cash', date: TODAY, reference:'' }),
+      credit: () => ({ amount: String(Math.min(credit, bal).toFixed(2)) }),
+      refund: () => ({ amount: String(round2(payment.amount - (payment.refundedAmount || 0)).toFixed(2)), reason:'' }),
+      delete: () => ({ reason:'' }),
+    }[kind]();
+    this.setState({
+      menu: null,
+      form: Object.assign({ kind, invoiceId: inv.id, paymentId: payment ? payment.id : null, amount:'', method:'Cash', date:TODAY, reference:'', reason:'' }, start),
+    });
+  }
+
+  /* Every correction writes its reason into the invoice's activity. */
+  patchInvoice(id, fn) {
+    this.setState(st => ({ invoices: st.invoices.map(i => i.id === id ? fn(i) : i) }));
+  }
+
+  submitRecordPayment() {
+    const f = this.state.form;
+    const inv = this.state.invoices.find(i => i.id === f.invoiceId);
+    const amount = round2(Number(f.amount) || 0);
+    if (!inv || amount <= 0) return;
+    const excess = round2(Math.max(0, amount - balanceOf(inv)));
+    const applied = round2(amount - excess);
+    this.paymentSeq = (this.paymentSeq || 0) + 1;
+    const p = PAY({
+      id: 'PMT-N' + this.paymentSeq, method: f.method, kind:'offline',
+      reference: f.reference || '', date: f.date, amount: applied,
+      status:'Successful', deposit:{ state:'Awaiting deposit', date:null, batch:null },
+    });
+    this.setState(st => ({
+      form: null,
+      expanded: st.expanded.indexOf(inv.id) === -1 ? st.expanded.concat([inv.id]) : st.expanded,
+      credit: excess > 0 ? Object.assign({}, st.credit, { [inv.family]: round2((st.credit[inv.family] || 0) + excess) }) : st.credit,
+      invoices: st.invoices.map(i => i.id !== inv.id ? i : Object.assign({}, i, {
+        payments: i.payments.concat([p]),
+        log: (i.log || []).concat(['Recorded ' + f.method.toLowerCase() + ' payment ' + fmtMoney(applied) + ' on ' + fmtDate(f.date)]),
+      })),
+    }));
+    this.showToast(excess > 0
+      ? 'Payment recorded · ' + fmtMoney(excess) + ' to ' + inv.family + ' credit'
+      : 'Payment recorded for ' + inv.id);
+  }
+
+  submitCredit() {
+    const f = this.state.form;
+    const inv = this.state.invoices.find(i => i.id === f.invoiceId);
+    if (!inv) return;
+    const cap = Math.min(this.state.credit[inv.family] || 0, balanceOf(inv));
+    const amount = round2(Math.min(Number(f.amount) || 0, cap));
+    if (amount <= 0) return;
+    const entry = { label:'Credit applied', amount, date: TODAY };
+    const family = inv.family;
+    const apply = (sign) => this.setState(st => ({
+      credit: Object.assign({}, st.credit, { [family]: round2((st.credit[family] || 0) - sign * amount) }),
+      invoices: st.invoices.map(i => i.id !== inv.id ? i : Object.assign({}, i, {
+        credits: sign > 0 ? (i.credits || []).concat([entry]) : (i.credits || []).filter(c => c !== entry),
+        log: sign > 0
+          ? (i.log || []).concat(['Applied ' + fmtMoney(amount) + ' credit on ' + fmtDate(TODAY)])
+          : (i.log || []).slice(0, -1),
+      })),
+    }));
+    this.setState({ form: null });
+    apply(1);
+    this.showToast(fmtMoney(amount) + ' credit applied to ' + inv.id, () => apply(-1));
+  }
+
+  submitRefund() {
+    const f = this.state.form;
+    const inv = this.state.invoices.find(i => i.id === f.invoiceId);
+    if (!inv || !f.reason.trim()) return;
+    const p = inv.payments.find(x => x.id === f.paymentId);
+    const max = round2(p.amount - (p.refundedAmount || 0));
+    const amount = round2(Math.min(Number(f.amount) || 0, max));
+    if (amount <= 0) return;
+    const refunded = round2((p.refundedAmount || 0) + amount);
+    this.setState({ form: null });
+    this.patchInvoice(inv.id, (i) => Object.assign({}, i, {
+      payments: i.payments.map(x => x.id !== p.id ? x : Object.assign({}, x, {
+        refundedAmount: refunded,
+        status: refunded >= x.amount ? 'Refunded' : 'Partly refunded',
+      })),
+      log: (i.log || []).concat(['Refunded ' + fmtMoney(amount) + ' on ' + fmtDate(TODAY) + ' — ' + f.reason.trim()]),
+    }));
+    this.showToast(fmtMoney(amount) + ' refunded on ' + inv.id);
+  }
+
+  submitDeletePayment() {
+    const f = this.state.form;
+    const inv = this.state.invoices.find(i => i.id === f.invoiceId);
+    if (!inv || !f.reason.trim()) return;
+    const p = inv.payments.find(x => x.id === f.paymentId);
+    this.setState({ form: null });
+    this.patchInvoice(inv.id, (i) => Object.assign({}, i, {
+      payments: i.payments.filter(x => x.id !== p.id),
+      log: (i.log || []).concat(['Deleted ' + p.method.toLowerCase() + ' payment ' + fmtMoney(p.amount) + ' on ' + fmtDate(TODAY) + ' — ' + f.reason.trim()]),
+    }));
+    this.showToast('Payment deleted from ' + inv.id);
+  }
+
+  showToast(msg, undo) {
+    this.toastSeq = (this.toastSeq || 0) + 1;
+    const seq = this.toastSeq;
+    this.setState({ toast: msg, toastUndo: undo || null });
+    setTimeout(() => {
+      if (this.toastSeq === seq) this.setState({ toast:'', toastUndo:null });
+    }, undo ? 6000 : 2800);
+  }
+
+  /* Widths come from every invoice, not just the visible ones, so the grid
+     doesn't reflow each time a filter changes. */
+  columnWidths(cols, list) {
+    const w = {};
+    cols.forEach(c => {
+      if (c.field === 'status') { w[c.field] = 56; return; }
+      if (c.field === 'expand') { w[c.field] = 32; return; }
+      if (c.field === 'actions') { w[c.field] = null; return; }
+      let max = textWidth(c.label, FONT_HEAD) + (c.sortable ? 16 : 0);
+      list.forEach(inv => {
+        const m = cellMetrics(c.field, inv);
+        max = Math.max(max, textWidth(m[0], m[1]) + m[2]);
+      });
+      w[c.field] = Math.ceil(max) + CELL_PAD + 2;
+    });
+    return w;
+  }
+
+  filteredWith(s) {
+    let r = s.invoices;
+    if (s.invoiceFilter) r = r.filter(MATCH[s.invoiceFilter]);
+    if (s.exceptionFilter) r = r.filter(MATCH[s.exceptionFilter]);
+    if (s.search.trim()) {
+      const q = s.search.trim().toLowerCase();
+      r = r.filter(i => {
+        if (s.searchCategory === 'id') return i.id.toLowerCase().includes(q);
+        if (s.searchCategory === 'payor') return i.payor.toLowerCase().includes(q);
+        if (s.searchCategory === 'family') return i.family.toLowerCase().includes(q);
+        return (i.id + ' ' + i.payor + ' ' + i.family).toLowerCase().includes(q);
+      });
+    }
+    const get = SORT_VALUE[s.sortField];
+    if (get) {
+      const dir = s.sortDir === 'asc' ? 1 : -1;
+      r = r.slice().sort((a, b) => {
+        const av = get(a), bv = get(b);
+        if (typeof av === 'number') return (av - bv) * dir;
+        return String(av).localeCompare(String(bv)) * dir;
+      });
+    }
+    return r;
+  }
+
+  filtered() { return this.filteredWith(this.state); }
+
+  /* Any change to a filter re-scopes the selection to the rows still on screen,
+     so a bulk action can never reach a row the user cannot see. */
+  setFilters(patch) {
+    this.setState(st => {
+      const next = Object.assign({}, st, patch);
+      const visible = this.filteredWith(next);
+      const invIds = visible.map(i => i.id);
+      const payIds = [];
+      visible.forEach(i => { if (next.expanded.indexOf(i.id) !== -1) i.payments.forEach(p => payIds.push(p.id)); });
+      return Object.assign({}, patch, {
+        selected: {
+          invoices: st.selected.invoices.filter(id => invIds.indexOf(id) !== -1),
+          payments: st.selected.payments.filter(id => payIds.indexOf(id) !== -1),
+        },
+      });
+    });
+  }
+
+  /* Two independent radio sets. Clicking the active tile clears that set only. */
+  toggleFilter(field, value) {
+    const patch = { menu:null };
+    patch[field] = this.state[field] === value ? '' : value;
+    this.setFilters(patch);
+  }
+
+  toggleExpand(id) {
+    this.setState(st => {
+      const on = st.expanded.indexOf(id) !== -1;
+      const inv = st.invoices.find(i => i.id === id);
+      const payIds = inv ? inv.payments.map(p => p.id) : [];
+      return {
+        expanded: on ? st.expanded.filter(x => x !== id) : st.expanded.concat([id]),
+        /* Collapsing hides those payment rows, so they leave the selection. */
+        selected: on
+          ? { invoices: st.selected.invoices, payments: st.selected.payments.filter(p => payIds.indexOf(p) === -1) }
+          : st.selected,
+      };
+    });
+  }
+
+  toggleSelect(kind, id) {
+    this.setState(st => {
+      const list = st.selected[kind];
+      const next = list.indexOf(id) === -1 ? list.concat([id]) : list.filter(x => x !== id);
+      return { selected: Object.assign({}, st.selected, { [kind]: next }) };
+    });
+  }
+
+  moneyKpiStyle(active, bg, fg) {
+    return {
+      display:'flex', flexDirection:'column', gap:'2px',
+      padding:'var(--space-sm) var(--space-md)', border:'none', borderRadius:'var(--radius-md)',
+      fontFamily:'Quicksand, sans-serif', color:fg, cursor:'pointer', textAlign:'left', background:bg,
+      boxShadow:'var(--shadow-sm), inset 0 -3px 0 rgb(0 0 0 / 15%)' + (active ? ', 0 0 0 3px var(--blueberry-pie--300)' : ''),
+      transition:'box-shadow var(--transition-normal)',
+    };
+  }
+
+  /* Deliberately quieter than the money tiles: these are payment-level conditions. */
+  exceptionKpiStyle(active, ring) {
+    return {
+      display:'flex', flexDirection:'column', gap:'2px',
+      padding:'var(--space-xs) var(--space-sm)', borderRadius:'var(--radius-xs-plus)',
+      border:'1px solid ' + (active ? ring : 'var(--gray-3)'), background:'#fff',
+      fontFamily:'Quicksand, sans-serif', cursor:'pointer', textAlign:'left',
+      boxShadow: active ? 'inset 0 0 0 1px ' + ring : 'none',
+      transition:'box-shadow var(--transition-normal), border-color var(--transition-normal)',
+    };
+  }
+
+  /* Everything the invoice drawer renders. Returns {} when no invoice is open
+     so the spread is a no-op. */
+  drawerVals(inv) {
+    if (!inv) return {};
+    const bal = balanceOf(inv);
+    const credit = this.state.credit[inv.family] || 0;
+    const activity = ['Issued ' + fmtDate(inv.dueDate) + ' · Billing run 2026-07']
+      .concat(inv.log || []);
+
+    return {
+      drawerPayor: inv.payor,
+      drawerEmail: inv.payorEmail,
+      drawerFamily: inv.family,
+      drawerChild: inv.child,
+      drawerDue: fmtDate(inv.dueDate),
+      drawerDueStyle: {
+        fontWeight:700,
+        color: isPastDue(inv) ? 'var(--danger-700)' : 'var(--blueberry-pie--500)',
+      },
+      drawerAutoPay: inv.autoPay,
+      drawerAutoPayLabel: 'AutoPay is on for this payor',
+      drawerLines: inv.lineItems.map(l => ({
+        label: l.label,
+        amount: fmtMoney(l.amount),
+        amountStyle: {
+          fontSize:'var(--font-size-xs)', fontWeight:700, fontVariantNumeric:'tabular-nums',
+          color: l.amount < 0 ? 'var(--danger-700)' : 'var(--blueberry-pie--500)',
+        },
+      })),
+      drawerTotal: fmtMoney(inv.amount),
+      drawerNoPayments: inv.payments.length === 0,
+      drawerPayments: inv.payments.map(p => ({
+        method: p.method,
+        reference: p.reference,
+        amount: fmtMoney(p.amount),
+        detail: fmtDate(p.date) + ' · ' + p.status + (paymentDetail(p) ? ' · ' + paymentDetail(p) : ''),
+        iconPath: (PAYMENT_ICON[p.status] || {}).path,
+        iconStyle: { display:'grid', placeItems:'center', width:'16px', height:'16px', color:(PAYMENT_ICON[p.status] || {}).color },
+        menuLabel: 'Actions for ' + p.method + ' payment',
+        menuBtnStyle: {
+          display:'grid', placeItems:'center', width:'26px', height:'26px', padding:0,
+          border:'1px solid transparent', borderRadius:'var(--radius-xs-plus)',
+          background:'transparent', color:'var(--gray-6)', cursor:'pointer',
+        },
+        onOpenMenu: (e) => {
+          const r = e.currentTarget.getBoundingClientRect();
+          this.setState({ menu: { kind:'drawerPayment', id: p.id, invoiceId: inv.id, x: r.right, y: r.bottom, top: r.top } });
+        },
+      })),
+      drawerHasCredits: (inv.credits || []).length > 0,
+      drawerCredits: (inv.credits || []).map(c => ({
+        label: c.label, date: fmtDate(c.date), amount: fmtMoney(-c.amount),
+      })),
+      drawerBalance: fmtMoney(bal),
+      drawerActivity: activity,
+      onOpenFamilyFromInvoice: () => this.openFamily(inv.family),
+      drawerCreditBtnStyle: {
+        flex:1, padding:'10px 14px', borderRadius:'35px', fontFamily:'inherit',
+        fontSize:'var(--font-size-base)', fontWeight:700, background:'#fff',
+        border:'1px solid ' + (credit > 0 && bal > 0 ? 'var(--gray-4)' : 'var(--gray-3)'),
+        color: credit > 0 && bal > 0 ? 'var(--blueberry-pie--500)' : 'var(--gray-4)',
+        cursor: credit > 0 && bal > 0 ? 'pointer' : 'not-allowed',
+      },
+      onDrawerRecord: () => this.openForm('record', inv, null),
+      onDrawerCredit: credit > 0 && bal > 0 ? () => this.openForm('credit', inv, null) : null,
+      onDrawerResend: () => this.resendInvoices([inv.id]),
+      onPrint: () => this.showToast('Preparing invoice PDF…'),
+      onDownload: () => this.showToast('Preparing invoice PDF…'),
+      onOpenLedger: () => this.requestLedger(),
+    };
+  }
+
+  renderVals() {
+    const s = this.state;
+    const rows = this.filtered();
+    const all = s.invoices;
+    const cat = CATEGORIES.find(c => c.id === s.searchCategory) || CATEGORIES[0];
+
+    /* ---- selection scope ---- */
+    const visibleInvoiceIds = rows.filter(i => balanceOf(i) > 0).map(i => i.id);
+    const visiblePaymentIds = [];
+    rows.forEach(i => {
+      if (s.expanded.indexOf(i.id) !== -1) i.payments.forEach(p => { if (depositable(p)) visiblePaymentIds.push(p.id); });
+    });
+    const selInv = s.selected.invoices.filter(id => visibleInvoiceIds.indexOf(id) !== -1);
+    const selPay = s.selected.payments.filter(id => visiblePaymentIds.indexOf(id) !== -1);
+    const mixed = selInv.length > 0 && selPay.length > 0;
+
+    const allPayments = [];
+    all.forEach(i => i.payments.forEach(p => allPayments.push({ p, inv: i })));
+    const selPayObjs = allPayments.filter(x => selPay.indexOf(x.p.id) !== -1);
+    const selInvObjs = all.filter(i => selInv.indexOf(i.id) !== -1);
+
+    /* ---- KPI clusters ---- */
+    const sumBal = (fn) => round2(all.filter(fn).reduce((a, i) => a + Math.max(0, balanceOf(i)), 0));
+    const awaitingTotal = round2(allPayments.filter(x => depositable(x.p)).reduce((a, x) => a + effectiveAmount(x.p), 0));
+    const awaitingCount = allPayments.filter(x => depositable(x.p)).length;
+
+    const moneyDefs = [
+      { label:'Outstanding', value: fmtMoney(sumBal(MATCH['Outstanding'])), sub: all.filter(MATCH['Outstanding']).length + ' invoices', fv:'Outstanding', bg:'var(--blueberry-pie--500)', fg:'#fff' },
+      { label:'Past due',    value: fmtMoney(sumBal(MATCH['Past due'])),    sub: all.filter(MATCH['Past due']).length + ' invoices',    fv:'Past due',    bg:'var(--danger-500)',        fg:'#fff' },
+      { label:'Paid',        value: all.filter(MATCH['Paid']).length,        sub:'invoices settled',                                     fv:'Paid',        bg:'var(--gummy-sharks--800)', fg:'#fff' },
+    ];
+    const exceptionDefs = [
+      { label:'ACH failures',     value: all.filter(MATCH['ACH failures']).length, sub:' invoices', fv:'ACH failures',     ring:'var(--danger-500)',        color:'var(--danger-700)' },
+      { label:'Awaiting deposit', value: fmtMoney(awaitingTotal),                  sub:' · ' + awaitingCount + ' payments', fv:'Awaiting deposit', ring:'var(--cotton-candy--500)', color:'var(--cotton-candy--700)' },
+    ];
+
+    /* ---- columns ---- */
+    const widths = this.columnWidths(COLUMNS, all);
+    const gridCols = '44px ' + COLUMNS.map(c => c.field === 'actions' ? 'minmax(92px, 1fr)' : widths[c.field] + 'px').join(' ');
+    const fixedWidth = 44 + COLUMNS.reduce((a, c) => a + (widths[c.field] || 0), 0);
+
+    /* ---- display rows: invoice, then its payments when expanded ---- */
+    const displayRows = [];
+    rows.forEach(inv => {
+      const st = statusOf(inv);
+      const open = s.expanded.indexOf(inv.id) !== -1;
+      const selectable = balanceOf(inv) > 0;
+      displayRows.push({
+        isInvoice: true, isPayment: false, key: inv.id,
+        id: inv.id, payor: inv.payor, family: inv.family,
+        dueDate: fmtDate(inv.dueDate),
+        dueStyle: {
+          padding:'0 12px', display:'flex', alignItems:'center', whiteSpace:'nowrap',
+          fontWeight: isPastDue(inv) ? 700 : 400,
+          color: isPastDue(inv) ? 'var(--danger-700)' : 'var(--blueberry-pie--500)',
+        },
+        amount: fmtMoney(inv.amount),
+        paid: fmtMoney(paidOf(inv)),
+        balance: fmtMoney(balanceOf(inv)),
+        statusLabel: st,
+        statusStyle: pillStyle(st),
+        statusTitle: st,
+        autoPay: inv.autoPay,
+        iconPath: (INVOICE_ICON[st] || {}).path,
+        iconStyle: { display:'grid', placeItems:'center', width:'20px', height:'20px', color:(INVOICE_ICON[st] || {}).color },
+        hasPayments: inv.payments.length > 0,
+        expandLabel: (open ? 'Collapse ' : 'Expand ') + inv.payments.length + ' payments on ' + inv.id,
+        chevronStyle: { transform: open ? 'none' : 'rotate(-90deg)', transition:'transform var(--transition-fast)' },
+        onToggleExpand: () => this.toggleExpand(inv.id),
+        selectable,
+        selectLabel: 'Select ' + inv.id,
+        checked: selInv.indexOf(inv.id) !== -1,
+        onToggle: () => this.toggleSelect('invoices', inv.id),
+        style: {
+          display:'grid', gridTemplateColumns: gridCols,
+          height:'42px', alignItems:'center', fontSize:'12px',
+          borderBottom:'1px solid rgb(0 40 85 / 15%)', background:'#fff',
+        },
+        menuLabel: 'Actions for ' + inv.id,
+        menuBtnStyle: {
+          display:'grid', placeItems:'center', width:'28px', height:'28px', padding:0,
+          border:'1px solid ' + (s.menu && s.menu.id === inv.id ? 'var(--blueberry-pie--500)' : 'transparent'),
+          borderRadius:'var(--radius-xs-plus)',
+          background: s.menu && s.menu.id === inv.id ? 'var(--gray-2)' : 'transparent',
+          color:'var(--gray-6)', cursor:'pointer',
+        },
+        onOpen: () => this.openInvoice(inv.id, null),
+        onOpenFamily: () => this.openFamily(inv.family),
+        onOpenMenu: (e) => {
+          const r = e.currentTarget.getBoundingClientRect();
+          this.setState({ menu: { kind:'invoice', id: inv.id, x: r.right, y: r.bottom, top: r.top } });
+        },
+      });
+
+      if (!open) return;
+      inv.payments.forEach(p => {
+        const can = depositable(p);
+        displayRows.push({
+          isInvoice: false, isPayment: true, key: p.id,
+          method: p.method, reference: p.reference,
+          date: fmtDate(p.date), amount: fmtMoney(p.amount),
+          statusLabel: p.status, statusStyle: pillStyle(p.status),
+          detail: paymentDetail(p),
+          iconPath: (PAYMENT_ICON[p.status] || {}).path,
+          iconStyle: { display:'grid', placeItems:'center', width:'16px', height:'16px', flexShrink:0, color:(PAYMENT_ICON[p.status] || {}).color },
+          selectable: can,
+          selectLabel: 'Select ' + p.method + ' payment of ' + fmtMoney(p.amount),
+          checked: selPay.indexOf(p.id) !== -1,
+          onToggle: () => this.toggleSelect('payments', p.id),
+          menuLabel: 'Actions for ' + p.method + ' payment on ' + inv.id,
+          menuBtnStyle: {
+            display:'grid', placeItems:'center', width:'26px', height:'26px', padding:0, flexShrink:0,
+            border:'1px solid ' + (s.menu && s.menu.id === p.id ? 'var(--blueberry-pie--500)' : 'transparent'),
+            borderRadius:'var(--radius-xs-plus)',
+            background: s.menu && s.menu.id === p.id ? 'var(--gray-2)' : 'transparent',
+            color:'var(--gray-6)', cursor:'pointer',
+          },
+          onOpenMenu: (e) => {
+            const r = e.currentTarget.getBoundingClientRect();
+            this.setState({ menu: { kind:'payment', id: p.id, invoiceId: inv.id, x: r.right, y: r.bottom, top: r.top } });
+          },
+        });
+      });
+    });
+
+    /* ---- header select-all covers invoices only ---- */
+    const allChecked = visibleInvoiceIds.length > 0 && visibleInvoiceIds.every(id => selInv.indexOf(id) !== -1);
+    const someChecked = selInv.length > 0;
+
+    const filtersOn = !!(s.invoiceFilter || s.exceptionFilter || s.search.trim());
+    const visibleTotal = round2(rows.reduce((a, i) => a + i.amount, 0));
+    const visibleOutstanding = round2(rows.reduce((a, i) => a + Math.max(0, balanceOf(i)), 0));
+
+    /* ---- row overflow menu, fixed-positioned so the grid can't clip it ---- */
+    const menuItemStyle = (tone) => ({
+      display:'block', width:'100%', padding:'10px 14px', border:'none', background:'transparent',
+      fontFamily:'Quicksand, sans-serif', fontSize:'var(--font-size-xs)', fontWeight:700,
+      textAlign:'left', cursor:'pointer',
+      color: tone === 'danger' ? 'var(--danger-700)' : 'var(--blueberry-pie--500)',
+    });
+    let menuItems = [];
+    if (s.menu && s.menu.kind === 'invoice') {
+      menuItems = [
+        { label:'Record payment…', style: menuItemStyle(), onPick: () => this.openForm('record', all.find(i => i.id === s.menu.id), null) },
+        { label:'Resend invoice',  style: menuItemStyle(), onPick: () => this.resendInvoices([s.menu.id]) },
+        { label:'View invoice',    style: menuItemStyle(), onPick: () => this.openInvoice(s.menu.id, null) },
+      ];
+    } else if (s.menu && (s.menu.kind === 'payment' || s.menu.kind === 'drawerPayment')) {
+      const found = allPayments.find(x => x.p.id === s.menu.id);
+      if (found) {
+        const p = found.p;
+        if (s.menu.kind === 'payment') {
+          if (depositable(p)) menuItems.push({ label:'Deposit…', style: menuItemStyle(), onPick: () => this.setState({
+            menu:null,
+            confirm:{ kind:'deposit', ids:[p.id],
+              heading:'Deposit payment',
+              body:'Deposit this ' + p.method.toLowerCase() + ' payment of ' + fmtMoney(effectiveAmount(p)) + '? It will be stamped with today’s deposit batch reference.',
+              cta:'Deposit', tone:'brand' },
+          }) });
+          if (p.status === 'Successful' || p.status === 'Partly refunded') menuItems.push({ label:'Resend receipt', style: menuItemStyle(), onPick: () => { this.setState({ menu:null }); this.showToast('Receipt resent'); } });
+        } else {
+          if (refundable(p)) menuItems.push({ label:'Refund…', style: menuItemStyle('danger'), onPick: () => this.openForm('refund', found.inv, p) });
+          /* Delete is only for a payment recorded by hand. Money that actually
+             moved can be refunded but never erased. */
+          if (p.kind === 'offline') menuItems.push({ label:'Delete…', style: menuItemStyle('danger'), onPick: () => this.openForm('delete', found.inv, p) });
+        }
+      }
+    }
+    const menuHeight = menuItems.length * 38 + 8;
+    const flipUp = s.menu ? (s.menu.y + menuHeight + 12 > window.innerHeight) : false;
+
+    const drawerInv = s.drawer && s.drawer.invoiceId ? all.find(i => i.id === s.drawer.invoiceId) : null;
+
+    return Object.assign(this.drawerVals(drawerInv), {
+      billingPeriodLabel: 'as of 13 Aug 2026',
+      statusLegend: ['Open','Partly paid','Paid','Overdue'].map(k => ({
+        label: k,
+        path: INVOICE_ICON[k].path,
+        iconStyle: { display:'grid', placeItems:'center', width:'14px', height:'14px', color: INVOICE_ICON[k].color },
+      })),
+
+      moneyKpis: moneyDefs.map(k => ({
+        label: k.label, value: k.value, sub: k.sub,
+        active: s.invoiceFilter === k.fv,
+        style: this.moneyKpiStyle(s.invoiceFilter === k.fv, k.bg, k.fg),
+        onClick: () => this.toggleFilter('invoiceFilter', k.fv),
+      })),
+      exceptionKpis: exceptionDefs.map(k => ({
+        label: k.label, value: k.value, sub: k.sub,
+        active: s.exceptionFilter === k.fv,
+        style: this.exceptionKpiStyle(s.exceptionFilter === k.fv, k.ring),
+        valueStyle: { fontSize:'var(--font-size-lg)', fontWeight:700, fontVariantNumeric:'tabular-nums', lineHeight:1.1, color:k.color },
+        onClick: () => this.toggleFilter('exceptionFilter', k.fv),
+      })),
+
+      clearExceptionLabel: s.exceptionFilter ? 'Clear' : 'No filter',
+      clearExceptionStyle: {
+        display:'flex', alignItems:'center', gap:'4px', marginLeft:'auto',
+        padding:'2px 8px', borderRadius:'var(--radius-xs-plus)',
+        border:'1px solid ' + (s.exceptionFilter ? 'var(--gray-4)' : 'transparent'),
+        background:'transparent', fontFamily:'Quicksand, sans-serif',
+        fontSize:'var(--font-size-xxs)', fontWeight:700, whiteSpace:'nowrap',
+        color: s.exceptionFilter ? 'var(--gray-6)' : 'var(--gray-4)',
+        cursor: s.exceptionFilter ? 'pointer' : 'default',
+      },
+      onClearExceptionFilter: s.exceptionFilter ? () => this.setFilters({ exceptionFilter:'' }) : null,
+
+      clearFiltersLabel: filtersOn ? 'Clear filters' : 'No filters applied',
+      allInvoicesLabel: all.length + ' invoices',
+      clearFiltersStyle: {
+        display:'flex', flexDirection:'column', justifyContent:'center', gap:'var(--space-xxs)',
+        padding:'var(--space-sm) var(--space-md)', borderRadius:'var(--radius-md)',
+        border:'1px dashed ' + (filtersOn ? 'var(--blueberry-pie--300)' : 'var(--gray-3)'),
+        background:'transparent', fontFamily:'Quicksand, sans-serif', textAlign:'left',
+        color: filtersOn ? 'var(--blueberry-pie--500)' : 'var(--gray-5)',
+        cursor: filtersOn ? 'pointer' : 'default',
+      },
+      onClearFilters: filtersOn ? () => this.setState({
+        invoiceFilter:'', exceptionFilter:'', search:'', searchCategory:'any',
+        selected:{ invoices:[], payments:[] }, menu:null,
+      }) : null,
+
+      toastOpen: !!s.toast,
+      toast: s.toast,
+      toastHasUndo: !!s.toastUndo,
+      onUndo: () => {
+        const fn = s.toastUndo;
+        this.toastSeq = (this.toastSeq || 0) + 1;
+        this.setState({ toast:'', toastUndo:null });
+        if (fn) fn();
+      },
+
+      categoryLabel: cat.label,
+      searchPlaceholder: 'Search ' + cat.placeholder,
+      search: s.search,
+      onSearch: (e) => this.setFilters({ search: e.target.value }),
+      categoryOpen: s.categoryOpen,
+      onToggleCategory: () => this.setState({ categoryOpen: !s.categoryOpen }),
+      categories: CATEGORIES.map(c => ({
+        label: c.label,
+        onPick: () => { this.setState({ categoryOpen:false }); this.setFilters({ searchCategory: c.id }); },
+        style: {
+          display:'block', width:'100%', padding:'var(--space-xxs) var(--space-sm)', border:'none',
+          fontFamily:'Quicksand, sans-serif', fontSize:'var(--font-size-xs)', fontWeight:700, textAlign:'left', cursor:'pointer',
+          color: c.id === s.searchCategory ? '#fff' : 'var(--blueberry-pie--500)',
+          background: c.id === s.searchCategory ? 'var(--cotton-candy--500)' : '#fff',
+        },
+      })),
+      expandAllLabel: s.expanded.length ? 'Collapse all' : 'Expand all',
+      onExpandAll: () => this.setState(st => st.expanded.length
+        ? { expanded: [], selected: { invoices: st.selected.invoices, payments: [] } }
+        : { expanded: st.invoices.filter(i => i.payments.length).map(i => i.id) }),
+
+      rowCountLabel: rows.length + ' invoice' + (rows.length !== 1 ? 's' : '') + ' shown',
+      paginationLabel: rows.length ? '1 to ' + rows.length + ' of ' + rows.length : '0 of 0',
+      footerTotal: fmtMoney(visibleTotal),
+      footerOutstanding: fmtMoney(visibleOutstanding) + ' outstanding',
+
+      tableInnerStyle: { minWidth: (fixedWidth + 92) + 'px' },
+      headerStyle: {
+        display:'grid', gridTemplateColumns: gridCols, height:'48px', alignItems:'center',
+        position:'sticky', top:0, zIndex:2, background:'#fff',
+        borderBottom:'1px solid rgb(0 40 85 / 15%)', fontSize:'13px', fontWeight:700,
+      },
+      columns: COLUMNS.map(c => ({
+        label: c.label,
+        arrowStyle: {
+          display: c.sortable && s.sortField === c.field ? 'block' : 'none',
+          opacity: 0.7,
+          transform: s.sortDir === 'asc' ? 'rotate(180deg)' : 'none',
+        },
+        onSort: c.sortable ? () => this.setState({ sortField: c.field, sortDir: s.sortField === c.field && s.sortDir === 'asc' ? 'desc' : 'asc' }) : null,
+        style: { padding:'0 12px', display:'flex', alignItems:'center', justifyContent: c.center ? 'center' : 'flex-start', gap:'4px', height:'100%', cursor: c.sortable ? 'pointer' : 'default', userSelect:'none', whiteSpace:'nowrap' },
+      })),
+      allChecked,
+      headerCheckboxRef: (el) => { if (el) el.indeterminate = someChecked && !allChecked; },
+      onToggleAll: () => this.setState(st => ({
+        selected: Object.assign({}, st.selected, { invoices: allChecked ? [] : visibleInvoiceIds.slice() }),
+      })),
+      selectAllLabel: allChecked
+        ? 'Clear all ' + visibleInvoiceIds.length + ' outstanding invoices'
+        : 'Select all ' + visibleInvoiceIds.length + ' outstanding invoice' + (visibleInvoiceIds.length !== 1 ? 's' : ''),
+      selectAllBoxStyle: {
+        display:'grid', placeItems:'center', width:'15px', height:'15px', borderRadius:'3px',
+        border:'1px solid var(--gray-4)', background:'#fff', color:'var(--blueberry-pie--500)',
+      },
+      selectAllTickStyle: { display: allChecked ? 'block' : 'none' },
+
+      rows: displayRows,
+
+      /* The bar is always in the layout, so checking a box never shifts the grid. */
+      selectionBarStyle: {
+        display:'flex', alignItems:'center', gap:'var(--space-sm)',
+        height:'44px', padding:'0 var(--space-md)', marginBottom:'var(--space-xs)',
+        borderRadius:'var(--radius-md)',
+        border:'1px solid ' + (selInv.length + selPay.length ? 'var(--toasted-marshmallow--700)' : 'var(--gray-3)'),
+        background: selInv.length + selPay.length ? 'var(--toasted-marshmallow--500)' : 'var(--gray-1)',
+        color:'var(--blueberry-pie--500)',
+        transition:'background var(--transition-normal), border-color var(--transition-normal)',
+      },
+      hasSelection: selInv.length + selPay.length > 0,
+      noSelection: selInv.length + selPay.length === 0,
+      selectionLabel: mixed
+        ? selInv.length + ' invoice' + (selInv.length !== 1 ? 's' : '')
+          + ' + ' + selPay.length + ' payment' + (selPay.length !== 1 ? 's' : '') + ' selected'
+        : selInv.length
+          ? selInv.length + ' invoice' + (selInv.length !== 1 ? 's' : '') + ' selected'
+          : selPay.length + ' payment' + (selPay.length !== 1 ? 's' : '') + ' selected',
+      selectionTotal: mixed
+        ? 'Select one kind to act on them'
+        : selInv.length
+          ? fmtMoney(round2(selInvObjs.reduce((a, i) => a + balanceOf(i), 0))) + ' outstanding'
+          : fmtMoney(round2(selPayObjs.reduce((a, x) => a + effectiveAmount(x.p), 0))) + ' to deposit',
+      batchResendStyle: {
+        padding:'6px 18px', border:'none', borderRadius:'35px',
+        fontSize:'var(--font-size-xs)', fontWeight:700, color:'#fff',
+        background:'var(--blueberry-pie--500)',
+        opacity: selInv.length && !mixed ? 1 : 0.5,
+        cursor: selInv.length && !mixed ? 'pointer' : 'not-allowed',
+      },
+      batchDepositStyle: {
+        padding:'6px 18px', border:'1px solid var(--gummy-sharks--800)', borderRadius:'35px',
+        fontSize:'var(--font-size-xs)', fontWeight:700, color:'var(--gummy-sharks--900)', background:'#fff',
+        opacity: selPay.length && !mixed ? 1 : 0.5,
+        cursor: selPay.length && !mixed ? 'pointer' : 'not-allowed',
+      },
+      onBatchResend: selInv.length && !mixed ? () => this.setState({
+        confirm:{ kind:'resend', ids: selInv.slice(),
+          heading:'Resend ' + selInv.length + ' invoice' + (selInv.length !== 1 ? 's' : ''),
+          body:'Resend ' + selInv.length + ' invoice' + (selInv.length !== 1 ? 's' : '')
+            + ', totalling ' + fmtMoney(round2(selInvObjs.reduce((a, i) => a + balanceOf(i), 0)))
+            + ' outstanding? Each payor gets the invoice email again with a secure payment link.',
+          cta:'Resend', tone:'brand' },
+      }) : null,
+      onBatchDeposit: selPay.length && !mixed ? () => this.setState({
+        confirm:{ kind:'deposit', ids: selPay.slice(),
+          heading:'Deposit ' + selPay.length + ' payment' + (selPay.length !== 1 ? 's' : ''),
+          body:'Deposit ' + selPay.length + ' payment' + (selPay.length !== 1 ? 's' : '')
+            + ', totalling ' + fmtMoney(round2(selPayObjs.reduce((a, x) => a + effectiveAmount(x.p), 0)))
+            + '? They will share one deposit batch reference.',
+          cta:'Deposit', tone:'brand' },
+      }) : null,
+      onClearSelection: () => this.setState({ selected:{ invoices:[], payments:[] } }),
+
+      menuOpen: !!(s.menu && menuItems.length),
+      menuItems,
+      menuStyle: {
+        /* Above the drawer (1151) so a per-payment menu inside it is clickable. */
+        position:'fixed', zIndex:1160,
+        left: (s.menu ? Math.max(8, s.menu.x - 190) : 0) + 'px',
+        top: (s.menu ? (flipUp ? s.menu.top - menuHeight - 4 : s.menu.y + 4) : 0) + 'px',
+        width:'190px', padding:'4px 0', borderRadius:'var(--radius-xs-plus)',
+        border:'1px solid var(--gray-3)', background:'#fff', boxShadow:'var(--shadow-dropdown)', overflow:'hidden',
+      },
+      onCloseMenu: () => this.setState({ menu:null }),
+
+      drawerOpen: !!s.drawer,
+      drawerIsInvoice: !!(s.drawer && s.drawer.view === 'invoice'),
+      drawerIsFamily: !!(s.drawer && s.drawer.view === 'family'),
+      drawerTitle: !s.drawer ? '' : s.drawer.view === 'family' ? s.drawer.familyName : s.drawer.invoiceId,
+      drawerStatus: drawerInv ? statusOf(drawerInv) : '',
+      drawerStatusStyle: drawerInv ? pillStyle(statusOf(drawerInv)) : {},
+      drawerStyle: {
+        position:'fixed', top:0, right:0, bottom:0, zIndex:1151,
+        display:'flex', flexDirection:'column', width:'min(520px, 100vw)',
+        background:'#fff', color:'var(--blueberry-pie--500)',
+        boxShadow:'var(--shadow-lg)', animation:'dc-drawer-in var(--transition-normal)',
+      },
+      onCloseDrawer: () => this.closeDrawer(),
+      drawerHasBack: !!(s.drawer && s.drawer.backTo),
+      drawerBackLabel: s.drawer && s.drawer.backTo ? s.drawer.backTo : '',
+      onDrawerBack: s.drawer && s.drawer.backTo ? () => this.openFamily(s.drawer.backTo) : null,
+
+      familyMeta: (() => {
+        if (!s.drawer || s.drawer.view !== 'family') return '';
+        const list = all.filter(i => i.family === s.drawer.familyName);
+        const kids = [];
+        list.forEach(i => { if (kids.indexOf(i.childId) === -1) kids.push(i.childId); });
+        return kids.length + (kids.length === 1 ? ' child · ' : ' children · ')
+          + list.length + ' invoice' + (list.length !== 1 ? 's' : '') + ' · '
+          + fmtMoney(round2(list.reduce((a, i) => a + Math.max(0, balanceOf(i)), 0))) + ' outstanding';
+      })(),
+      familyCreditLabel: (() => {
+        if (!s.drawer || s.drawer.view !== 'family') return '';
+        const c = s.credit[s.drawer.familyName] || 0;
+        return c > 0 ? 'Credit balance ' + fmtMoney(c) : 'No credit balance';
+      })(),
+      familyCreditStyle: (() => {
+        const c = s.drawer && s.drawer.view === 'family' ? (s.credit[s.drawer.familyName] || 0) : 0;
+        return {
+          marginLeft:'auto', padding:'2px 8px', borderRadius:'var(--radius-sm)',
+          fontSize:'var(--font-size-xs)', fontWeight:700, whiteSpace:'nowrap',
+          color: c > 0 ? 'var(--cotton-candy--700)' : 'var(--gray-5)',
+          background: c > 0 ? 'var(--cotton-candy--50)' : 'transparent',
+        };
+      })(),
+      familyChildren: (() => {
+        if (!s.drawer || s.drawer.view !== 'family') return [];
+        const list = all.filter(i => i.family === s.drawer.familyName);
+        const ids = [];
+        list.forEach(i => { if (ids.indexOf(i.childId) === -1) ids.push(i.childId); });
+        return ids.map(cid => {
+          const kidRows = list.filter(i => i.childId === cid);
+          return {
+            name: kidRows[0].child,
+            childId: cid,
+            total: fmtMoney(round2(kidRows.reduce((a, i) => a + Math.max(0, balanceOf(i)), 0))),
+            invoices: kidRows.map(i => ({
+              id: i.id,
+              payor: i.payor,
+              balance: fmtMoney(balanceOf(i)),
+              statusLabel: statusOf(i),
+              statusStyle: pillStyle(statusOf(i)),
+              iconPath: (INVOICE_ICON[statusOf(i)] || {}).path,
+              iconStyle: { display:'grid', placeItems:'center', width:'16px', height:'16px', color:(INVOICE_ICON[statusOf(i)] || {}).color },
+              onOpen: () => this.openInvoice(i.id, s.drawer.familyName),
+            })),
+          };
+        });
+      })(),
+      onOpenLedgerFamily: () => this.requestLedger(),
+
+      /* One shared form shell drives record, credit, refund and delete. */
+      formOpen: !!s.form,
+      formHeading: (() => {
+        if (!s.form) return '';
+        return { record:'Record payment', credit:'Apply credit', refund:'Refund payment', delete:'Delete payment' }[s.form.kind];
+      })(),
+      formContext: (() => {
+        if (!s.form) return [];
+        const inv = all.find(i => i.id === s.form.invoiceId);
+        if (!inv) return [];
+        const ctx = [{ label:'INVOICE', value: inv.id }, { label:'BALANCE', value: fmtMoney(balanceOf(inv)) }];
+        if (s.form.kind === 'credit') ctx.push({ label:'AVAILABLE CREDIT', value: fmtMoney(s.credit[inv.family] || 0) });
+        if (s.form.kind === 'refund' || s.form.kind === 'delete') {
+          const p = inv.payments.find(x => x.id === s.form.paymentId);
+          if (p) ctx.push({ label:'PAYMENT', value: p.method + ' ' + fmtMoney(round2(p.amount - (p.refundedAmount || 0))) });
+        }
+        return ctx;
+      })(),
+      formShowAmount: !!s.form && s.form.kind !== 'delete',
+      formShowMethod: !!s.form && s.form.kind === 'record',
+      formShowDate: !!s.form && s.form.kind === 'record',
+      formShowReason: !!s.form && (s.form.kind === 'refund' || s.form.kind === 'delete'),
+      formReasonLabel: s.form && s.form.kind === 'delete' ? 'Reason for deleting' : 'Reason for refund',
+      formReasonPlaceholder: s.form && s.form.kind === 'delete' ? 'e.g. Cheque number keyed against the wrong invoice' : 'e.g. Duplicate charge',
+      formReferencePlaceholder: s.form && s.form.method === 'Check' ? 'Cheque number' : 'Optional',
+      formAmount: s.form ? s.form.amount : '',
+      formDate: s.form ? s.form.date : '',
+      formReference: s.form ? s.form.reference : '',
+      formReason: s.form ? s.form.reason : '',
+      onFormAmount: (e) => { const v = e.target.value; this.setState(st => ({ form: Object.assign({}, st.form, { amount: v }) })); },
+      onFormDate: (e) => { const v = e.target.value; this.setState(st => ({ form: Object.assign({}, st.form, { date: v }) })); },
+      onFormReference: (e) => { const v = e.target.value; this.setState(st => ({ form: Object.assign({}, st.form, { reference: v }) })); },
+      onFormReason: (e) => { const v = e.target.value; this.setState(st => ({ form: Object.assign({}, st.form, { reason: v }) })); },
+      formMethods: ['Cash','Check','Other'].map((m, idx, arr) => ({
+        label: m,
+        onPick: () => this.setState(st => ({ form: Object.assign({}, st.form, { method: m }) })),
+        style: {
+          padding:'8px 16px', fontFamily:'inherit', fontSize:'var(--font-size-xs)', fontWeight:700,
+          cursor:'pointer', whiteSpace:'nowrap', marginLeft: idx === 0 ? 0 : '-1px',
+          border:'1px solid ' + (s.form && s.form.method === m ? 'var(--blueberry-pie--500)' : 'var(--gray-3)'),
+          borderRadius: idx === 0 ? 'var(--radius-xs-plus) 0 0 var(--radius-xs-plus)'
+                      : idx === arr.length - 1 ? '0 var(--radius-xs-plus) var(--radius-xs-plus) 0' : '0',
+          color: s.form && s.form.method === m ? '#fff' : 'var(--gray-7)',
+          background: s.form && s.form.method === m ? 'var(--blueberry-pie--500)' : '#fff',
+        },
+      })),
+      formHasNotice: (() => {
+        if (!s.form) return false;
+        const inv = all.find(i => i.id === s.form.invoiceId);
+        if (!inv) return false;
+        if (s.form.kind === 'record') return round2(Number(s.form.amount) || 0) > balanceOf(inv);
+        if (s.form.kind === 'delete') return true;
+        if (s.form.kind === 'credit') return true;
+        return false;
+      })(),
+      formNotice: (() => {
+        if (!s.form) return '';
+        const inv = all.find(i => i.id === s.form.invoiceId);
+        if (!inv) return '';
+        if (s.form.kind === 'record') {
+          const excess = round2((Number(s.form.amount) || 0) - balanceOf(inv));
+          return excess > 0 ? fmtMoney(excess) + ' over the balance will be added to the ' + inv.family + ' credit balance.' : '';
+        }
+        if (s.form.kind === 'credit') {
+          const cap = Math.min(s.credit[inv.family] || 0, balanceOf(inv));
+          return 'Capped at ' + fmtMoney(cap) + ' — the lesser of the credit balance and the invoice balance.';
+        }
+        if (s.form.kind === 'delete') {
+          return 'Deleting removes this payment from the invoice and from all totals. Use it only for a payment recorded in error — to return money that actually moved, refund instead.';
+        }
+        return '';
+      })(),
+      formNoticeStyle: {
+        fontSize:'var(--font-size-xs)', fontWeight:600, lineHeight:1.5,
+        color: s.form && s.form.kind === 'delete' ? 'var(--danger-700)' : 'var(--cotton-candy--700)',
+      },
+      formCta: s.form ? { record:'Record payment', credit:'Apply credit', refund:'Refund', delete:'Delete payment' }[s.form.kind] : '',
+      formCtaStyle: (() => {
+        if (!s.form) return {};
+        const needsReason = (s.form.kind === 'refund' || s.form.kind === 'delete') && !s.form.reason.trim();
+        const needsAmount = s.form.kind !== 'delete' && !(round2(Number(s.form.amount) || 0) > 0);
+        const ok = !needsReason && !needsAmount;
+        const danger = s.form.kind === 'refund' || s.form.kind === 'delete';
+        return {
+          height:'2rem', padding:'0 2rem', border:'none', borderRadius:'35px', fontFamily:'inherit',
+          fontSize:'var(--font-size-base)', fontWeight:700, color:'#fff',
+          background: danger ? 'var(--danger-500)' : 'var(--cotton-candy--500)',
+          opacity: ok ? 1 : 0.5, cursor: ok ? 'pointer' : 'not-allowed',
+        };
+      })(),
+      onCancelForm: () => this.setState({ form:null }),
+      onSubmitForm: () => {
+        if (!s.form) return;
+        if (s.form.kind === 'record') return this.submitRecordPayment();
+        if (s.form.kind === 'credit') return this.submitCredit();
+        if (s.form.kind === 'refund') return this.submitRefund();
+        if (s.form.kind === 'delete') return this.submitDeletePayment();
+      },
+
+      confirmOpen: !!s.confirm,
+      confirmHeading: s.confirm ? s.confirm.heading : '',
+      confirmBody: s.confirm ? s.confirm.body : '',
+      confirmCta: s.confirm ? s.confirm.cta : '',
+      confirmCtaStyle: {
+        height:'2rem', padding:'0 2rem', border:'none', borderRadius:'35px', fontFamily:'inherit',
+        fontSize:'var(--font-size-base)', fontWeight:700, color:'#fff', cursor:'pointer',
+        background: s.confirm && s.confirm.tone === 'danger' ? 'var(--danger-500)' : 'var(--cotton-candy--500)',
+      },
+      onCancelConfirm: () => this.setState({ confirm:null }),
+      onSubmitConfirm: () => {
+        if (!s.confirm) return;
+        if (s.confirm.kind === 'resend') return this.resendInvoices(s.confirm.ids);
+        if (s.confirm.kind === 'deposit') return this.depositPayments(s.confirm.ids);
+        this.setState({ confirm:null });
+      },
+
+      ledgerOpen: s.ledgerOpen,
+      ledgerSuppressChecked: s.ledgerSuppressed,
+      onToggleLedgerSuppress: (e) => this.setState({ ledgerSuppressed: e.target.checked }),
+      onCloseLedger: () => this.setState({ ledgerOpen:false }),
+      onOpenLedgerConfirm: () => { this.setState({ ledgerOpen:false }); this.showToast('Family ledger — coming next'); },
+    });
+  }
+}
+
+</script>
+</body>
+</html>
