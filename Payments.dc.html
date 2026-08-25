@@ -29,6 +29,125 @@
         <h1 style="margin:0; font-size:var(--font-size-xxl); font-weight:700; line-height:1; text-align:left; color:var(--blueberry-pie--500);">Financial Dashboard &mdash; Payments</h1>
       </div>
 
+      <div style="display:flex; margin-bottom:var(--space-xs); flex-shrink:0;">
+        <div id="tab-btn-management" role="button" tabindex="0" style="padding:6px 16px; font-family:inherit; font-size:var(--font-size-xs); font-weight:700; cursor:pointer; border:1px solid var(--blueberry-pie--500); border-radius:var(--radius-xs-plus) 0 0 var(--radius-xs-plus); background:var(--blueberry-pie--500); color:#fff; user-select:none;">Invoice Management</div>
+        <div id="tab-btn-analytics" role="button" tabindex="0" style="padding:6px 16px; margin-left:-1px; font-family:inherit; font-size:var(--font-size-xs); font-weight:700; cursor:pointer; border:1px solid var(--blueberry-pie--500); border-radius:0 var(--radius-xs-plus) var(--radius-xs-plus) 0; background:#fff; color:var(--blueberry-pie--500); user-select:none;">Invoice Analytics</div>
+      </div>
+
+      <!-- Static overview: KPI strip + Invoice Status / Aging charts. Display-only, no data binding. -->
+      <div id="tab-analytics" style="display:none; flex-direction:column; gap:6px; flex-shrink:0; margin-bottom:6px;">
+
+        <div style="display:grid; grid-template-columns:repeat(5, 1fr); gap:6px;">
+
+          <div style="background:#fff; border:1px solid var(--gray-2); border-radius:var(--radius-sm); padding:5px 8px; display:flex; flex-direction:column; gap:1px;">
+            <span style="font-size:var(--font-size-xxs); font-weight:700; color:var(--gray-6);">Total Outstanding A/R</span>
+            <div style="display:flex; align-items:center; gap:6px;">
+              <span style="display:flex; align-items:center; justify-content:center; width:18px; height:18px; border-radius:50%; background:var(--gummy-sharks--700); color:#fff; font-weight:700; font-size:10px; flex-shrink:0;">$</span>
+              <span style="font-size:var(--font-size-lg); font-weight:700; color:var(--blueberry-pie--500); font-variant-numeric:tabular-nums;">$1,245,890</span>
+            </div>
+            <span style="font-size:var(--font-size-xxs); font-weight:700; color:var(--gummy-sharks--900);">&uarr; 6.5% <span style="color:var(--gray-5); font-weight:600;">vs Jul 2026</span></span>
+          </div>
+
+          <div style="background:#fff; border:1px solid var(--gray-2); border-radius:var(--radius-sm); padding:5px 8px; display:flex; flex-direction:column; gap:1px;">
+            <span style="font-size:var(--font-size-xxs); font-weight:700; color:var(--gray-6);">Open Invoices</span>
+            <div style="display:flex; align-items:center; gap:6px;">
+              <span style="display:flex; align-items:center; justify-content:center; width:18px; height:18px; border-radius:50%; background:var(--cotton-candy--500); color:#fff; flex-shrink:0;">
+                <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M6 2h9l5 5v15H6z"></path><path d="M15 2v5h5"></path><path d="M9 13h6M9 17h6"></path></svg>
+              </span>
+              <span style="font-size:var(--font-size-lg); font-weight:700; color:var(--blueberry-pie--500); font-variant-numeric:tabular-nums;">4,328</span>
+            </div>
+            <span style="font-size:var(--font-size-xxs); font-weight:700; color:var(--gummy-sharks--900);">&uarr; 3.2% <span style="color:var(--gray-5); font-weight:600;">vs Jul 2026</span></span>
+          </div>
+
+          <div style="background:#fff; border:1px solid var(--gray-2); border-radius:var(--radius-sm); padding:5px 8px; display:flex; flex-direction:column; gap:1px;">
+            <span style="font-size:var(--font-size-xxs); font-weight:700; color:var(--gray-6);">Past Due Invoices</span>
+            <div style="display:flex; align-items:center; gap:6px;">
+              <span style="display:flex; align-items:center; justify-content:center; width:18px; height:18px; border-radius:50%; background:var(--danger-500); color:#fff; flex-shrink:0;">
+                <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><circle cx="12" cy="13" r="8"></circle><path d="M12 9v4l3 2"></path><path d="M9 2h6"></path></svg>
+              </span>
+              <span style="font-size:var(--font-size-lg); font-weight:700; color:var(--blueberry-pie--500); font-variant-numeric:tabular-nums;">687</span>
+            </div>
+            <span style="font-size:var(--font-size-xxs); font-weight:700; color:var(--danger-500);">&uarr; 12.7% <span style="color:var(--gray-5); font-weight:600;">vs Jul 2026</span></span>
+          </div>
+
+          <div style="background:#fff; border:1px solid var(--gray-2); border-radius:var(--radius-sm); padding:5px 8px; display:flex; flex-direction:column; gap:1px;">
+            <span style="font-size:var(--font-size-xxs); font-weight:700; color:var(--gray-6);">Due This Week</span>
+            <div style="display:flex; align-items:center; gap:6px;">
+              <span style="display:flex; align-items:center; justify-content:center; width:18px; height:18px; border-radius:50%; background:var(--toasted-marshmallow--900); color:#fff; flex-shrink:0;">
+                <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2"></rect><path d="M8 2v5M16 2v5M3 9h18"></path></svg>
+              </span>
+              <span style="font-size:var(--font-size-lg); font-weight:700; color:var(--blueberry-pie--500); font-variant-numeric:tabular-nums;">289</span>
+            </div>
+            <span style="font-size:var(--font-size-xxs); font-weight:700; color:var(--gummy-sharks--900);">&darr; 5.1% <span style="color:var(--gray-5); font-weight:600;">vs Jul 2026</span></span>
+          </div>
+
+          <div style="background:#fff; border:1px solid var(--gray-2); border-radius:var(--radius-sm); padding:5px 8px; display:flex; flex-direction:column; gap:1px;">
+            <span style="font-size:var(--font-size-xxs); font-weight:700; color:var(--gray-6);">ACH Failures</span>
+            <div style="display:flex; align-items:center; gap:6px;">
+              <span style="display:flex; align-items:center; justify-content:center; width:18px; height:18px; border-radius:50%; background:var(--danger-500); color:#fff; flex-shrink:0;">
+                <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><rect x="2" y="5" width="20" height="14" rx="2"></rect><path d="M2 9h20" stroke-width="4"></path></svg>
+              </span>
+              <span style="font-size:var(--font-size-lg); font-weight:700; color:var(--blueberry-pie--500); font-variant-numeric:tabular-nums;">24</span>
+            </div>
+            <span style="font-size:var(--font-size-xxs); font-weight:700; color:var(--danger-500);">&uarr; 14 <span style="color:var(--gray-5); font-weight:600;">vs Jul 2026</span></span>
+          </div>
+
+        </div>
+
+        <div style="display:flex; align-items:stretch; gap:6px;">
+
+          <div style="flex:0 0 19%; box-sizing:border-box; background:#fff; border:1px solid var(--gray-2); border-radius:var(--radius-sm); padding:6px 9px; display:flex; flex-direction:column; gap:4px;">
+            <span style="font-size:9px; font-weight:700; color:var(--blueberry-pie--500);">Invoice Status Overview</span>
+            <div style="display:flex; align-items:center; gap:8px;">
+              <div style="position:relative; width:90px; height:90px; flex-shrink:0;">
+                <svg width="90" height="90" viewBox="0 0 100 100">
+                  <circle cx="50" cy="50" r="38" fill="none" stroke="var(--gray-2)" stroke-width="16"></circle>
+                  <circle cx="50" cy="50" r="38" fill="none" stroke="var(--cotton-candy--100)" stroke-width="16" stroke-dasharray="1.3 237.5" stroke-dashoffset="0" transform="rotate(-90 50 50)"></circle>
+                  <circle cx="50" cy="50" r="38" fill="none" stroke="var(--cotton-candy--500)" stroke-width="16" stroke-dasharray="55.3 183.5" stroke-dashoffset="-1.3" transform="rotate(-90 50 50)"></circle>
+                  <circle cx="50" cy="50" r="38" fill="none" stroke="var(--toasted-marshmallow--900)" stroke-width="16" stroke-dasharray="37.1 201.7" stroke-dashoffset="-56.6" transform="rotate(-90 50 50)"></circle>
+                  <circle cx="50" cy="50" r="38" fill="none" stroke="var(--warning-500)" stroke-width="16" stroke-dasharray="8.9 229.9" stroke-dashoffset="-93.7" transform="rotate(-90 50 50)"></circle>
+                  <circle cx="50" cy="50" r="38" fill="none" stroke="var(--gummy-sharks--700)" stroke-width="16" stroke-dasharray="114.9 123.9" stroke-dashoffset="-102.6" transform="rotate(-90 50 50)"></circle>
+                  <circle cx="50" cy="50" r="38" fill="none" stroke="var(--danger-300)" stroke-width="16" stroke-dasharray="20.6 218.2" stroke-dashoffset="-217.5" transform="rotate(-90 50 50)"></circle>
+                  <circle cx="50" cy="50" r="38" fill="none" stroke="var(--danger-500)" stroke-width="16" stroke-dasharray="0.7 238.1" stroke-dashoffset="-238.1" transform="rotate(-90 50 50)"></circle>
+                </svg>
+                <div style="position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center;">
+                  <span style="font-size:12px; font-weight:700; color:var(--blueberry-pie--500); line-height:1;">8,971</span>
+                  <span style="font-size:7px; font-weight:600; color:var(--gray-5);">Total</span>
+                </div>
+              </div>
+              <div style="display:grid; grid-template-columns:repeat(2, auto); column-gap:9px; row-gap:5px; flex:1;">
+                <div style="display:flex; align-items:center; gap:4px;"><span style="width:6px; height:6px; border-radius:50%; background:var(--cotton-candy--100); flex-shrink:0;"></span><span style="font-size:8px; font-weight:600; color:var(--blueberry-pie--500); white-space:nowrap;">Draft 43</span></div>
+                <div style="display:flex; align-items:center; gap:4px;"><span style="width:6px; height:6px; border-radius:50%; background:var(--gummy-sharks--700); flex-shrink:0;"></span><span style="font-size:8px; font-weight:600; color:var(--blueberry-pie--500); white-space:nowrap;">Paid 3,842</span></div>
+                <div style="display:flex; align-items:center; gap:4px;"><span style="width:6px; height:6px; border-radius:50%; background:var(--cotton-candy--500); flex-shrink:0;"></span><span style="font-size:8px; font-weight:600; color:var(--blueberry-pie--500); white-space:nowrap;">Sent 1,850</span></div>
+                <div style="display:flex; align-items:center; gap:4px;"><span style="width:6px; height:6px; border-radius:50%; background:var(--danger-300); flex-shrink:0;"></span><span style="font-size:8px; font-weight:600; color:var(--blueberry-pie--500); white-space:nowrap;">Past Due 687</span></div>
+                <div style="display:flex; align-items:center; gap:4px;"><span style="width:6px; height:6px; border-radius:50%; background:var(--toasted-marshmallow--900); flex-shrink:0;"></span><span style="font-size:8px; font-weight:600; color:var(--blueberry-pie--500); white-space:nowrap;">Viewed 1,240</span></div>
+                <div style="display:flex; align-items:center; gap:4px;"><span style="width:6px; height:6px; border-radius:50%; background:var(--danger-500); flex-shrink:0;"></span><span style="font-size:8px; font-weight:600; color:var(--blueberry-pie--500); white-space:nowrap;">Failed 24</span></div>
+                <div style="display:flex; align-items:center; gap:4px;"><span style="width:6px; height:6px; border-radius:50%; background:var(--warning-500); flex-shrink:0;"></span><span style="font-size:8px; font-weight:600; color:var(--blueberry-pie--500); white-space:nowrap;">Partial 298</span></div>
+              </div>
+            </div>
+          </div>
+
+          <div style="flex:0 0 19%; box-sizing:border-box; background:#fff; border:1px solid var(--gray-2); border-radius:var(--radius-sm); padding:6px 9px; display:flex; flex-direction:column; gap:4px; justify-content:center;">
+            <span style="font-size:9px; font-weight:700; color:var(--blueberry-pie--500);">Aging Analysis &#40;Outstanding&#41;</span>
+            <div style="display:flex; flex-direction:column; gap:5px;">
+              <div style="display:flex; align-items:center; gap:6px;"><span style="width:48px; flex-shrink:0; font-size:8px; font-weight:600; color:var(--blueberry-pie--500);">Current</span><span style="flex:1; height:10px; border-radius:var(--radius-xs-plus); background:var(--gray-2); overflow:hidden;"><span style="display:block; width:100%; height:100%; background:var(--gummy-sharks--700); border-radius:var(--radius-xs-plus);"></span></span><span style="width:48px; flex-shrink:0; text-align:right; font-size:8px; font-weight:700; color:var(--blueberry-pie--500);">$625,000</span></div>
+              <div style="display:flex; align-items:center; gap:6px;"><span style="width:48px; flex-shrink:0; font-size:8px; font-weight:600; color:var(--blueberry-pie--500);">1-30 Days</span><span style="flex:1; height:10px; border-radius:var(--radius-xs-plus); background:var(--gray-2); overflow:hidden;"><span style="display:block; width:33.6%; height:100%; background:var(--cotton-candy--500); border-radius:var(--radius-xs-plus);"></span></span><span style="width:48px; flex-shrink:0; text-align:right; font-size:8px; font-weight:700; color:var(--blueberry-pie--500);">$210,000</span></div>
+              <div style="display:flex; align-items:center; gap:6px;"><span style="width:48px; flex-shrink:0; font-size:8px; font-weight:600; color:var(--blueberry-pie--500);">31-60 Days</span><span style="flex:1; height:10px; border-radius:var(--radius-xs-plus); background:var(--gray-2); overflow:hidden;"><span style="display:block; width:23.2%; height:100%; background:var(--warning-500); border-radius:var(--radius-xs-plus);"></span></span><span style="width:48px; flex-shrink:0; text-align:right; font-size:8px; font-weight:700; color:var(--blueberry-pie--500);">$145,000</span></div>
+              <div style="display:flex; align-items:center; gap:6px;"><span style="width:48px; flex-shrink:0; font-size:8px; font-weight:600; color:var(--blueberry-pie--500);">61-90 Days</span><span style="flex:1; height:10px; border-radius:var(--radius-xs-plus); background:var(--gray-2); overflow:hidden;"><span style="display:block; width:15.2%; height:100%; background:var(--toasted-marshmallow--900); border-radius:var(--radius-xs-plus);"></span></span><span style="width:48px; flex-shrink:0; text-align:right; font-size:8px; font-weight:700; color:var(--blueberry-pie--500);">$95,000</span></div>
+              <div style="display:flex; align-items:center; gap:6px;"><span style="width:48px; flex-shrink:0; font-size:8px; font-weight:600; color:var(--blueberry-pie--500);">90+ Days</span><span style="flex:1; height:10px; border-radius:var(--radius-xs-plus); background:var(--gray-2); overflow:hidden;"><span style="display:block; width:27.3%; height:100%; background:var(--danger-500); border-radius:var(--radius-xs-plus);"></span></span><span style="width:48px; flex-shrink:0; text-align:right; font-size:8px; font-weight:700; color:var(--blueberry-pie--500);">$170,890</span></div>
+            </div>
+          </div>
+
+        </div>
+
+        <div style="width:160px; height:160px; background:var(--gray-2); border-radius:var(--radius-sm); display:flex; align-items:center; justify-content:center; text-align:center; flex-shrink:0;">
+          <span style="font-size:var(--font-size-xs); font-weight:600; color:var(--gray-6);">Content to be added</span>
+        </div>
+
+      </div>
+
+      <div id="tab-management" style="display:contents;">
+
       <div style="display:flex; align-items:stretch; gap:var(--space-md); flex-shrink:0;">
 
         <div style="flex:5; display:flex; flex-direction:column; gap:var(--space-xxs); min-width:0;">
@@ -87,6 +206,13 @@
 
         <div style="display:flex; flex-wrap:wrap; align-items:center; gap:.75rem; padding:var(--space-sm) var(--space-md); border:none; border-radius:var(--radius-md); background:var(--blueberry-pie--500); color:#fff; box-shadow:var(--shadow-sm); margin-bottom:var(--space-xs);">
 
+          <span style="font-size:var(--font-size-xs); font-weight:700; color:#fff; white-space:nowrap;">Group by:</span>
+          <div style="display:flex;">
+            <sc-for list="{{ groupModes }}" as="mode" hint-placeholder-count="3">
+              <button onClick="{{ mode.onPick }}" style="{{ mode.style }}">{{ mode.label }}</button>
+            </sc-for>
+          </div>
+
           <div style="position:relative; display:flex; flex-direction:row; flex:0 1 320px; min-width:0; max-width:340px;">
             <button onClick="{{ onToggleCategory }}" style="display:flex; align-items:center; gap:.25rem; padding:var(--space-xxs) var(--space-sm); border:none; border-radius:var(--radius-xs-plus) 0 0 var(--radius-xs-plus); font-size:var(--font-size-xs); font-weight:700; white-space:nowrap; color:#fff; background:var(--cotton-candy--500); cursor:pointer;" style-hover="background:var(--cotton-candy--600);">
               {{ categoryLabel }}
@@ -138,6 +264,13 @@
 
               <sc-for list="{{ rows }}" as="row" hint-placeholder-count="12">
                 <div>
+                  <sc-if value="{{ row.isGroup }}" hint-placeholder-val="{{ false }}">
+                    <div style="display:flex; align-items:center; gap:var(--space-xs); height:42px; padding:0 12px; background:var(--blueberry-pie--500); color:#fff; border-bottom:1px solid rgb(0 40 85 / 15%); font-size:13px; font-weight:700;">
+                      <button onClick="{{ row.onOpenGroup }}" style="padding:0; border:none; background:none; font-family:inherit; font-size:inherit; font-weight:inherit; color:inherit; text-align:left; cursor:{{ row.groupCursor }};" style-hover="text-decoration:underline;">{{ row.groupLabel }}</button>
+                      <span style="font-weight:600; opacity:.8;">{{ row.groupMeta }}</span>
+                      <span style="margin-left:auto; font-variant-numeric:tabular-nums;">{{ row.groupTotal }}</span>
+                    </div>
+                  </sc-if>
                   <sc-if value="{{ row.isInvoice }}" hint-placeholder-val="{{ true }}">
                     <div style="{{ row.style }}">
                       <div style="display:flex; align-items:center; justify-content:center; height:100%;">
@@ -154,6 +287,10 @@
                       <div style="padding:0 12px; display:flex; align-items:center; white-space:nowrap;"><button onClick="{{ row.onOpen }}" style="color:var(--cotton-candy--500); font-weight:600; background:none; border:none; padding:0; font-family:inherit; font-size:inherit; cursor:pointer;" style-hover="text-decoration:underline;">{{ row.id }}</button></div>
                       <div style="padding:0 12px; display:flex; align-items:center; font-weight:700; white-space:nowrap;">{{ row.payor }}</div>
                       <div style="padding:0 12px; display:flex; align-items:center; white-space:nowrap;"><button onClick="{{ row.onOpenFamily }}" style="padding:0; border:none; background:none; font-family:inherit; font-size:inherit; font-weight:inherit; color:inherit; text-align:left; cursor:pointer;" style-hover="text-decoration:underline;">{{ row.family }}</button></div>
+                      <div style="padding:0 12px; display:flex; align-items:center; color:var(--gray-6); overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">{{ row.payorEmail }}</div>
+                      <div style="padding:0 12px; display:flex; align-items:center; font-weight:600; white-space:nowrap;">{{ row.children }}</div>
+                      <div style="padding:0 12px; display:flex; align-items:center; white-space:nowrap;"><span style="{{ row.enrollmentStatusStyle }}">{{ row.enrollmentStatus }}</span></div>
+                      <div style="padding:0 12px; display:flex; align-items:center; overflow:hidden;" title="{{ row.notesFull }}"><span style="{{ row.notesStyle }}">{{ row.notes }}</span></div>
                       <div style="{{ row.dueStyle }}">{{ row.dueDate }}</div>
                       <div style="padding:0 12px; display:flex; align-items:center; font-variant-numeric:tabular-nums; white-space:nowrap;">{{ row.amount }}</div>
                       <div style="padding:0 12px; display:flex; align-items:center; font-variant-numeric:tabular-nums; color:var(--gray-6); white-space:nowrap;">{{ row.paid }}</div>
@@ -202,6 +339,8 @@
             <span style="opacity:.35; letter-spacing:2px;">&#8676; &#8592; &#8594; &#8677;</span>
           </div>
         </div>
+      </div>
+
       </div>
     </div>
   </main>
@@ -471,6 +610,35 @@
 </div>
 
 </x-dc>
+<script>
+  function dcShowTab(tab) {
+    var an = document.getElementById('tab-analytics');
+    var mg = document.getElementById('tab-management');
+    var bAn = document.getElementById('tab-btn-analytics');
+    var bMg = document.getElementById('tab-btn-management');
+    if (tab === 'analytics') {
+      an.style.display = 'flex';
+      mg.style.display = 'none';
+      bAn.style.background = 'var(--blueberry-pie--500)';
+      bAn.style.color = '#fff';
+      bMg.style.background = '#fff';
+      bMg.style.color = 'var(--blueberry-pie--500)';
+    } else {
+      an.style.display = 'none';
+      mg.style.display = 'contents';
+      bMg.style.background = 'var(--blueberry-pie--500)';
+      bMg.style.color = '#fff';
+      bAn.style.background = '#fff';
+      bAn.style.color = 'var(--blueberry-pie--500)';
+    }
+  }
+  document.addEventListener('click', function (e) {
+    var mgBtn = e.target.closest && e.target.closest('#tab-btn-management');
+    var anBtn = e.target.closest && e.target.closest('#tab-btn-analytics');
+    if (mgBtn) dcShowTab('management');
+    else if (anBtn) dcShowTab('analytics');
+  });
+</script>
 <script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1600,&quot;height&quot;:900}}">
 const TODAY = '2026-08-13';
 
@@ -491,22 +659,22 @@ const PAY = (o) => Object.assign({
    one of these. Billing period Jul 1–31, 2026; TODAY is 13 Aug 2026. */
 const INVOICES = [
   { id:'INV-1101', payor:'Marcus Johnson', payorEmail:'m.johnson@email.com', family:'Johnson Family', child:'Ava Johnson', childId:'CH-101',
-    dueDate:'2026-07-15', amount:650, autoPay:false,
+    dueDate:'2026-07-15', amount:650, autoPay:false, enrollmentStatus:'Enrolled',
     lineItems:[{ label:'Tuition, July', amount:620 }, { label:'Late pickup fee', amount:30 }],
     credits:[], payments:[ PAY({ id:'PMT-9001', method:'Card', reference:'····4242', date:'2026-07-12', amount:650, status:'Successful', deposit:{ state:'Deposited', date:'2026-07-13', batch:'DEP-2026-0713-1' } }) ] },
 
   { id:'INV-1102', payor:'Alicia Johnson', payorEmail:'a.johnson@email.com', family:'Johnson Family', child:'Ava Johnson', childId:'CH-101',
-    dueDate:'2026-07-15', amount:433.33, autoPay:false,
+    dueDate:'2026-07-15', amount:433.33, autoPay:false, enrollmentStatus:'Enrolled',
     lineItems:[{ label:'Tuition, July', amount:413.33 }, { label:'Late pickup fee', amount:20 }],
     credits:[], payments:[ PAY({ id:'PMT-9002', method:'Check', kind:'offline', reference:'#1032', date:'2026-07-10', amount:200, status:'Successful', deposit:{ state:'Awaiting deposit', date:null, batch:null } }) ] },
 
   { id:'INV-1103', payor:'Elena Garcia', payorEmail:'elena.garcia@email.com', family:'Garcia Family', child:'Mateo Garcia', childId:'CH-102',
-    dueDate:'2026-08-20', amount:825, autoPay:true,
+    dueDate:'2026-08-20', amount:825, autoPay:true, enrollmentStatus:'Enrolled',
     lineItems:[{ label:'Tuition, August', amount:825 }],
     credits:[], payments:[ PAY({ id:'PMT-9003', method:'ACH', reference:'····6789', date:'2026-08-20', amount:825, status:'Scheduled' }) ] },
 
   { id:'INV-1104', payor:'Rafael Martinez', payorEmail:'r.martinez@email.com', family:'Martinez Family', child:'Lucia Martinez', childId:'CH-103',
-    dueDate:'2026-07-08', amount:950, autoPay:true,
+    dueDate:'2026-07-08', amount:950, autoPay:true, enrollmentStatus:'Withdrawn',
     lineItems:[{ label:'Tuition, July', amount:900 }, { label:'Late pickup fee', amount:50 }],
     credits:[], payments:[
       PAY({ id:'PMT-9004', method:'ACH', reference:'····6789', date:'2026-07-08', amount:950, status:'Failed', code:'R01', codeLabel:'Insufficient funds' }),
@@ -514,76 +682,83 @@ const INVOICES = [
     ] },
 
   { id:'INV-1105', payor:'Dana Smith', payorEmail:'dana.smith@email.com', family:'Smith Family', child:'Noah Smith', childId:'CH-104',
-    dueDate:'2026-07-05', amount:800, autoPay:false,
+    dueDate:'2026-07-05', amount:800, autoPay:false, enrollmentStatus:'Enrolled',
     lineItems:[{ label:'Tuition, July', amount:800 }],
     credits:[{ label:'Closure day, 4 Jul', amount:50, date:'2026-07-06' }],
     payments:[ PAY({ id:'PMT-9006', method:'Card', reference:'····1881', date:'2026-07-04', amount:750, status:'Successful', deposit:{ state:'Deposited', date:'2026-07-05', batch:'DEP-2026-0705-1' } }) ] },
 
   { id:'INV-1106', payor:'Kyle Smith', payorEmail:'kyle.smith@email.com', family:'Smith Family', child:'Noah Smith', childId:'CH-104',
-    dueDate:'2026-07-05', amount:400, autoPay:false,
+    dueDate:'2026-07-05', amount:400, autoPay:false, enrollmentStatus:'Enrolled',
     lineItems:[{ label:'Tuition, July', amount:400 }],
     credits:[], payments:[] },
 
   { id:'INV-1107', payor:'Priya Thompson', payorEmail:'p.thompson@email.com', family:'Thompson Family', child:'Rohan Thompson', childId:'CH-105',
-    dueDate:'2026-07-02', amount:475, autoPay:false,
+    dueDate:'2026-07-02', amount:475, autoPay:false, enrollmentStatus:'Enrolled',
     lineItems:[{ label:'Tuition, July', amount:475 }],
     credits:[], payments:[ PAY({ id:'PMT-9007', method:'Card', reference:'····9310', date:'2026-07-01', amount:475, status:'Refunded', refundedAmount:475, deposit:{ state:'Deposited', date:'2026-07-02', batch:'DEP-2026-0702-1' } }) ] },
 
   { id:'INV-1108', payor:'Owen Anderson', payorEmail:'o.anderson@email.com', family:'Anderson Family', child:'Ellie Anderson', childId:'CH-106',
-    dueDate:'2026-08-15', amount:700, autoPay:false,
+    dueDate:'2026-08-15', amount:700, autoPay:false, enrollmentStatus:'Enrolled',
     lineItems:[{ label:'Tuition, August', amount:700 }],
     credits:[], payments:[] },
 
   { id:'INV-1109', payor:'Grace Wilson', payorEmail:'g.wilson@email.com', family:'Wilson Family', child:'Iris Wilson', childId:'CH-107',
-    dueDate:'2026-07-22', amount:330, autoPay:false,
+    dueDate:'2026-07-22', amount:330, autoPay:false, enrollmentStatus:'Enrolled',
     lineItems:[{ label:'Tuition, July', amount:330 }],
     credits:[], payments:[ PAY({ id:'PMT-9008', method:'Cash', kind:'offline', reference:'Front desk', date:'2026-07-20', amount:330, status:'Successful', deposit:{ state:'Awaiting deposit', date:null, batch:null } }) ] },
 
   { id:'INV-1110', payor:'Ben Wilson', payorEmail:'ben.wilson@email.com', family:'Wilson Family', child:'Iris Wilson', childId:'CH-107',
-    dueDate:'2026-07-22', amount:220, autoPay:false,
+    dueDate:'2026-07-22', amount:220, autoPay:false, enrollmentStatus:'Enrolled',
     lineItems:[{ label:'Tuition, July', amount:220 }],
     credits:[], payments:[ PAY({ id:'PMT-9009', method:'ACH', reference:'····4501', date:'2026-07-21', amount:220, status:'Pending' }) ] },
 
   { id:'INV-1111', payor:'Nina Davis', payorEmail:'nina.davis@email.com', family:'Davis Family', child:'Theo Davis', childId:'CH-108',
-    dueDate:'2026-06-25', amount:875, autoPay:false,
+    dueDate:'2026-06-25', amount:875, autoPay:false, enrollmentStatus:'Withdrawn',
     lineItems:[{ label:'Tuition, June', amount:875 }],
     credits:[], payments:[] },
 
   { id:'INV-1112', payor:'Carla Miller', payorEmail:'c.miller@email.com', family:'Miller Family', child:'June Miller', childId:'CH-109',
-    dueDate:'2026-07-10', amount:450, autoPay:false,
+    dueDate:'2026-07-10', amount:450, autoPay:false, enrollmentStatus:'Enrolled',
     lineItems:[{ label:'Tuition, July', amount:450 }],
     credits:[], payments:[ PAY({ id:'PMT-9010', method:'Card', reference:'····7702', date:'2026-07-09', amount:450, status:'Partly refunded', refundedAmount:100, deposit:{ state:'Deposited', date:'2026-07-10', batch:'DEP-2026-0710-1' } }) ] },
 
   { id:'INV-1113', payor:'Sam Taylor', payorEmail:'sam.taylor@email.com', family:'Taylor Family', child:'Beau Taylor', childId:'CH-110',
-    dueDate:'2026-08-18', amount:660, autoPay:true,
+    dueDate:'2026-08-18', amount:660, autoPay:true, enrollmentStatus:'Enrolled',
     lineItems:[{ label:'Tuition, August', amount:660 }],
     credits:[], payments:[ PAY({ id:'PMT-9011', method:'ACH', reference:'····2245', date:'2026-08-18', amount:660, status:'Scheduled' }) ] },
 
   { id:'INV-1114', payor:'Jess Taylor', payorEmail:'jess.taylor@email.com', family:'Taylor Family', child:'Beau Taylor', childId:'CH-110',
-    dueDate:'2026-07-18', amount:440, autoPay:false,
+    dueDate:'2026-07-18', amount:440, autoPay:false, enrollmentStatus:'Enrolled',
     lineItems:[{ label:'Tuition, July', amount:440 }],
     credits:[], payments:[ PAY({ id:'PMT-9012', method:'Check', kind:'offline', reference:'#2088', date:'2026-07-16', amount:440, status:'Successful', deposit:{ state:'Awaiting deposit', date:null, batch:null } }) ] },
 
   { id:'INV-1115', payor:'Alan Harris', payorEmail:'a.harris@email.com', family:'Harris Family', child:'Cora Harris', childId:'CH-111',
-    dueDate:'2026-07-12', amount:625, autoPay:false,
+    dueDate:'2026-07-12', amount:625, autoPay:false, enrollmentStatus:'Enrolled',
     lineItems:[{ label:'Tuition, July', amount:687.50 }, { label:'Sibling discount', amount:-62.50 }],
     credits:[], payments:[ PAY({ id:'PMT-9013', method:'ACH', reference:'····3390', date:'2026-07-12', amount:625, status:'Failed', code:'R02', codeLabel:'Account closed' }) ] },
 
   { id:'INV-1116', payor:'Renee Jackson', payorEmail:'r.jackson@email.com', family:'Jackson Family', child:'Malik Jackson', childId:'CH-112',
-    dueDate:'2026-06-30', amount:775, autoPay:false,
+    dueDate:'2026-06-30', amount:775, autoPay:false, enrollmentStatus:'Enrolled',
     lineItems:[{ label:'Tuition, June', amount:775 }],
     credits:[{ label:'Goodwill credit', amount:75, date:'2026-07-02' }],
     payments:[ PAY({ id:'PMT-9014', method:'Card', reference:'····5560', date:'2026-07-02', amount:700, status:'Successful', deposit:{ state:'Deposited', date:'2026-07-03', batch:'DEP-2026-0703-1' } }) ] },
 
   { id:'INV-1117', payor:'Mei Lee', payorEmail:'mei.lee@email.com', family:'Lee Family', child:'Hana Lee', childId:'CH-113',
-    dueDate:'2026-08-25', amount:475, autoPay:false,
+    dueDate:'2026-08-25', amount:475, autoPay:false, enrollmentStatus:'Waitlisted',
     lineItems:[{ label:'Tuition, August', amount:475 }],
     credits:[], payments:[] },
 
   { id:'INV-1118', payor:'Linh Nguyen', payorEmail:'linh.nguyen@email.com', family:'Nguyen Family', child:'Zoe Nguyen', childId:'CH-116',
-    dueDate:'2026-07-28', amount:540, autoPay:false,
+    dueDate:'2026-07-28', amount:540, autoPay:false, enrollmentStatus:'Enrolled',
     lineItems:[{ label:'Tuition, July', amount:540 }],
     credits:[], payments:[ PAY({ id:'PMT-9015', method:'Card', reference:'····8123', date:'2026-07-27', amount:540, status:'Successful', deposit:{ state:'Awaiting deposit', date:null, batch:null } }) ] },
+
+  /* Marcus Johnson's second child — the only payor with more than one invoice,
+     so the Children column has a real rollup to render. */
+  { id:'INV-1119', payor:'Marcus Johnson', payorEmail:'m.johnson@email.com', family:'Johnson Family', child:'Eli Johnson', childId:'CH-118',
+    dueDate:'2026-08-18', amount:610, autoPay:false, enrollmentStatus:'Enrolled',
+    lineItems:[{ label:'Tuition, August', amount:610 }],
+    credits:[], payments:[] },
 ];
 
 const round2 = (n) => Math.round(n * 100) / 100;
@@ -646,6 +821,10 @@ const COLUMNS = [
   { field:'id',          label:'Invoice #', sortable:true },
   { field:'payor',       label:'Payor',     sortable:true },
   { field:'family',      label:'Family',    sortable:true },
+  { field:'payorEmail',  label:'Payor Email',      sortable:true },
+  { field:'children',    label:'Children',         sortable:false },
+  { field:'enrollmentStatus', label:'Enrollment Status', sortable:true },
+  { field:'notes',       label:'Notes',            sortable:false },
   { field:'dueDate',     label:'Due date',  sortable:true },
   { field:'amount',      label:'Amount',    sortable:true },
   { field:'paid',        label:'Paid',      sortable:true },
@@ -656,6 +835,7 @@ const COLUMNS = [
 
 const SORT_VALUE = {
   id: (i) => i.id, payor: (i) => i.payor, family: (i) => i.family,
+  payorEmail: (i) => i.payorEmail, enrollmentStatus: (i) => i.enrollmentStatus,
   dueDate: (i) => i.dueDate, amount: (i) => i.amount,
   paid: paidOf, balance: balanceOf, statusLabel: statusOf, status: statusOf,
 };
@@ -676,6 +856,8 @@ const FONT_CELL_BOLD = '700 12px Quicksand, sans-serif';
 const FONT_CELL_SEMI = '600 12px Quicksand, sans-serif';
 const FONT_HEAD = '700 13px Quicksand, sans-serif';
 
+const NOTES_MAX = 320;
+
 let _measureCtx = null;
 function textWidth(text, font) {
   if (!_measureCtx) _measureCtx = document.createElement('canvas').getContext('2d');
@@ -683,11 +865,33 @@ function textWidth(text, font) {
   return _measureCtx.measureText(String(text == null ? '' : text)).width;
 }
 
-function cellMetrics(field, inv) {
+/* Display-only rollup of a payor's sibling invoices — does not touch
+   INVOICES, payment math, or the family drawer. A payor with one invoice
+   returns a one-element array so the cell never grows rollup chrome. */
+function childrenOf(payor, list) {
+  return list.filter(i => i.payor === payor).map(i => ({ child: i.child, amount: i.amount }));
+}
+const childrenLabel = (kids) => kids.map(k => k.child).join(' · ');
+
+/* A failed ACH attempt is more actionable than a credit, so it wins when an
+   invoice has both. Never authored text — always derived from payments/credits. */
+function notesOf(inv) {
+  const failed = inv.payments.filter(p => p.status === 'Failed').length;
+  if (failed > 0) return failed + ' failed ACH attempt' + (failed !== 1 ? 's' : '');
+  const credits = inv.credits || [];
+  if (credits.length > 0) return 'Credit applied ' + fmtMoney(-credits[credits.length - 1].amount);
+  return '';
+}
+
+function cellMetrics(field, inv, all) {
   switch (field) {
     case 'id':          return [inv.id, FONT_CELL_SEMI, 0];
     case 'payor':       return [inv.payor, FONT_CELL_BOLD, 0];
     case 'family':      return [inv.family, FONT_CELL, 0];
+    case 'payorEmail':  return [inv.payorEmail, FONT_CELL, 0];
+    case 'children':    return [childrenLabel(childrenOf(inv.payor, all)), FONT_CELL_SEMI, 0];
+    case 'enrollmentStatus': return [inv.enrollmentStatus, FONT_CELL_BOLD, 16];
+    case 'notes':        return [notesOf(inv), FONT_CELL_SEMI, 0];
     case 'dueDate':     return [fmtDate(inv.dueDate), FONT_CELL, 0];
     case 'amount':      return [fmtMoney(inv.amount), FONT_CELL, 0];
     case 'paid':        return [fmtMoney(paidOf(inv)), FONT_CELL, 0];
@@ -702,6 +906,9 @@ const PILL = {
   Paid:              { color:'var(--gummy-sharks--900)', background:'var(--gummy-sharks--100)' },
   'Partly paid':     { color:'var(--cotton-candy--700)', background:'var(--cotton-candy--50)' },
   Open:              { color:'var(--gray-6)',            background:'var(--gray-2)' },
+  Enrolled:          { color:'var(--gummy-sharks--900)', background:'var(--gummy-sharks--100)' },
+  Waitlisted:        { color:'var(--gray-6)',            background:'var(--gray-2)' },
+  Withdrawn:         { color:'var(--danger-700)',        background:'var(--gray-2)' },
   Overdue:           { color:'var(--danger-700)',        background:'rgb(238 191 193)' },
   Successful:        { color:'var(--gummy-sharks--900)', background:'var(--gummy-sharks--100)' },
   Pending:           { color:'rgb(145 116 16)',          background:'var(--warning-100)' },
@@ -746,7 +953,7 @@ class Component extends DCLogic {
     invoices: INVOICES.map(i => Object.assign({}, i)),
     credit: Object.assign({}, FAMILY_CREDIT),
     invoiceFilter:'', exceptionFilter:'', search:'', searchCategory:'any',
-    categoryOpen:false, expanded:[],
+    categoryOpen:false, groupBy:'none', expanded:[],
     selected:{ invoices:[], payments:[] },
     sortField:'dueDate', sortDir:'asc',
     menu:null, drawer:null, ledgerOpen:false, ledgerSuppressed:false,
@@ -943,10 +1150,10 @@ class Component extends DCLogic {
       if (c.field === 'actions') { w[c.field] = null; return; }
       let max = textWidth(c.label, FONT_HEAD) + (c.sortable ? 16 : 0);
       list.forEach(inv => {
-        const m = cellMetrics(c.field, inv);
+        const m = cellMetrics(c.field, inv, list);
         max = Math.max(max, textWidth(m[0], m[1]) + m[2]);
       });
-      w[c.field] = Math.ceil(max) + CELL_PAD + 2;
+      w[c.field] = Math.min(Math.ceil(max) + CELL_PAD + 2, c.field === 'notes' ? NOTES_MAX : Infinity);
     });
     return w;
   }
@@ -1161,15 +1368,38 @@ class Component extends DCLogic {
     const gridCols = '44px ' + COLUMNS.map(c => c.field === 'actions' ? 'minmax(92px, 1fr)' : widths[c.field] + 'px').join(' ');
     const fixedWidth = 44 + COLUMNS.reduce((a, c) => a + (widths[c.field] || 0), 0);
 
+    /* ---- group-by: reorders/headers the flat row set, nothing else ---- */
+    const ENROLLMENT_ORDER = ['Enrolled', 'Waitlisted', 'Withdrawn'];
+    let buckets = null;
+    if (s.groupBy === 'family') {
+      const labels = [];
+      rows.forEach(i => { if (labels.indexOf(i.family) === -1) labels.push(i.family); });
+      buckets = labels.map(f => ({ label: f, kids: rows.filter(i => i.family === f), openable: true }));
+    } else if (s.groupBy === 'enrollment') {
+      buckets = ENROLLMENT_ORDER
+        .map(v => ({ label: v, kids: rows.filter(i => i.enrollmentStatus === v), openable: false }))
+        .filter(b => b.kids.length);
+    }
+
     /* ---- display rows: invoice, then its payments when expanded ---- */
     const displayRows = [];
-    rows.forEach(inv => {
+    const emitInvoiceRow = (inv) => {
       const st = statusOf(inv);
       const open = s.expanded.indexOf(inv.id) !== -1;
       const selectable = balanceOf(inv) > 0;
+      const noteText = notesOf(inv);
       displayRows.push({
         isInvoice: true, isPayment: false, key: inv.id,
-        id: inv.id, payor: inv.payor, family: inv.family,
+        id: inv.id, payor: inv.payor, family: inv.family, payorEmail: inv.payorEmail,
+        children: childrenLabel(childrenOf(inv.payor, all)),
+        enrollmentStatus: inv.enrollmentStatus,
+        enrollmentStatusStyle: pillStyle(inv.enrollmentStatus),
+        notes: noteText,
+        notesFull: noteText,
+        notesStyle: {
+          overflow:'hidden', textOverflow:'ellipsis', whiteSpace:'nowrap',
+          color:'var(--gray-6)', fontWeight:600,
+        },
         dueDate: fmtDate(inv.dueDate),
         dueStyle: {
           padding:'0 12px', display:'flex', alignItems:'center', whiteSpace:'nowrap',
@@ -1243,7 +1473,23 @@ class Component extends DCLogic {
           },
         });
       });
-    });
+    };
+
+    if (buckets) {
+      buckets.forEach(({ label, kids, openable }) => {
+        displayRows.push({
+          isGroup: true, isInvoice: false, isPayment: false, key: 'g-' + label,
+          groupLabel: label,
+          groupMeta: kids.length + ' invoice' + (kids.length !== 1 ? 's' : ''),
+          groupTotal: fmtMoney(round2(kids.reduce((a, k) => a + Math.max(0, balanceOf(k)), 0))) + ' outstanding',
+          onOpenGroup: openable ? () => this.openFamily(label) : null,
+          groupCursor: openable ? 'pointer' : 'default',
+        });
+        kids.forEach(emitInvoiceRow);
+      });
+    } else {
+      rows.forEach(emitInvoiceRow);
+    }
 
     /* ---- header select-all covers invoices only ---- */
     const allChecked = visibleInvoiceIds.length > 0 && visibleInvoiceIds.every(id => selInv.indexOf(id) !== -1);
@@ -1351,6 +1597,22 @@ class Component extends DCLogic {
         this.setState({ toast:'', toastUndo:null });
         if (fn) fn();
       },
+
+      groupModes: [['none','None'],['family','Family'],['enrollment','Enrollment Status']].map(([id, label], idx, arr) => ({
+        label,
+        onPick: () => this.setState({ groupBy: id }),
+        style: {
+          padding:'6px 14px', fontFamily:'inherit', fontSize:'var(--font-size-xs)', fontWeight:700,
+          cursor:'pointer', whiteSpace:'nowrap',
+          marginLeft: idx === 0 ? 0 : '-1px',
+          position: s.groupBy === id ? 'relative' : 'static',
+          border:'1px solid ' + (s.groupBy === id ? 'var(--cotton-candy--500)' : 'rgb(255 255 255 / 45%)'),
+          borderRadius: idx === 0 ? 'var(--radius-xs-plus) 0 0 var(--radius-xs-plus)'
+                      : idx === arr.length - 1 ? '0 var(--radius-xs-plus) var(--radius-xs-plus) 0' : '0',
+          color:'#fff',
+          background: s.groupBy === id ? 'var(--cotton-candy--500)' : 'transparent',
+        },
+      })),
 
       categoryLabel: cat.label,
       searchPlaceholder: 'Search ' + cat.placeholder,

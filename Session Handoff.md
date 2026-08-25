@@ -1,16 +1,24 @@
 # Session Handoff
 
-Last worked: 13 Aug 2026. Two pages are built and verified in a browser: `Draft Invoices.dc.html` and `Payments.dc.html`. `Accounting Dashboard.dc.html` has been deleted — the Payments page replaced it.
+Last worked: 25 Aug 2026. Three pages are built and verified in a browser: `Draft Invoices.dc.html`, `Payments.dc.html` (now including Invoice Management additions), and its ported Invoice Analytics tab. `Accounting Dashboard.dc.html` has been deleted — the Payments page replaced it.
 
 ---
 
-## In progress: Invoice Management (Payments)
+## Shipped: Invoice Management (Payments)
 
-User stories 52724 (Invoice List) and 56066 (Header Section). See `Design Spec — Invoice Management.md` and `Implementation Plan — Invoice Management.md`.
+User stories 52724 (Invoice List) and 56066 (Header Section), per `Design Spec — Invoice Management.md` and `Implementation Plan — Invoice Management.md`. All 4 tasks executed and browser-verified on branch `invoice-management-payments`; checkboxes in the plan were left unticked.
 
-Spec is agreed — key calls: Children column is a display-only rollup of a payor's sibling invoices, not a data-model merge; Payments-only, `Draft Invoices.dc.html` untouched; new `enrollmentStatus` field (Enrolled/Waitlisted/Withdrawn), separate from Draft Invoices' enrollment-*change* semantics; Notes column is computed (ACH failure count / credit summary), not authored; Invoice Analytics tab is a straight static port from Draft Invoices, not wired to real data.
+- **Group-by control** (`None` / `Family` / `Enrollment Status`) added to the Payments toolbar, same button-row pattern as Draft Invoices. Group headers are informational only (navy/white, invoice count + outstanding subtotal) — no group-level checkbox or collapse, since selection and expand/collapse stay per-invoice underneath the grouping, per spec. The Family header is clickable through to the family drawer; the Enrollment Status header is not.
+- **Four new columns** inserted after Family, before Due date: **Payor Email** (verbatim port), **Children** (display-only rollup of a payor's sibling invoices — `childrenOf(payor, list)` — single child shows a bare name, multiple join with " · "; does not touch `INVOICES`, payment math, or the family drawer), **Enrollment Status** (new `enrollmentStatus` field per invoice: Enrolled/Waitlisted/Withdrawn, pill-styled), **Notes** (computed via `notesOf(inv)` — ACH failure count takes priority over the most recent credit; blank, not a dash, when neither applies).
+- **Invoice Analytics tab** ported wholesale from Draft Invoices (tab switcher, KPI strip, pie chart, aging bars, `Content to be added` placeholder) — same hardcoded values, not wired to Payments' real numbers.
+- **Mock data:** every invoice got an `enrollmentStatus` (16 Enrolled, 2 Withdrawn — INV-1104 and INV-1111, both already past due/ACH-failed — 1 Waitlisted — INV-1117). Added **INV-1119** (Marcus Johnson / Eli Johnson) so at least one payor has sibling invoices for the Children column to roll up — the plan's checkpoint required this but no payor in the original 18 had more than one invoice.
+- `Draft Invoices.dc.html` is untouched (confirmed via `git diff --stat`).
 
-Implementation not yet started — begin at Task 1 of the implementation plan.
+### Open threads from this pass
+
+- The plan's Task 2 Step 5 mentioned rechecking a CSV export column list — `Payments.dc.html` has no CSV export (that's a Draft Invoices–only feature), so that step was a no-op.
+- Children column has never been tested with 3+ siblings — only the one 2-invoice case (Marcus Johnson) exists in the mock data.
+- No collapse control on group headers in Payments (unlike Draft Invoices' family groups) — deliberate, since grouping here is spec'd as reorder/header-only, but worth confirming that's still the right call once real data volumes are considered.
 
 ---
 
